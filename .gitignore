@@ -1,7 +1,6 @@
 out/*
 .idea/*
 doc/latex/out*
-!doc/latex/out/finalterm.pdf
 .atom-build.yml
 PA-finalterm.iml
 termfinal17-07.pdf
