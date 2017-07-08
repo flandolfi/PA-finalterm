@@ -16,7 +16,7 @@ public class DSLSet {
     public Relation getRelationWith(DSLSet range) {
         return relations.getOrDefault(range, new Relation(this, range) {
             @Override
-            public boolean addPair(Value lValue, Value rValue) { return false; }
+            public boolean addPair(Value lValue, Value rValue) { return true; }
 
             @Override
             public HashSet<Value> getSuccessorNeighborhoodOf(Value value) {
