@@ -20,7 +20,7 @@ public class DSLSet {
 
             @Override
             public HashSet<Value> getSuccessorNeighborhoodOf(Value value) {
-                return range.getValues();
+                return range.getValues(); // Cartesian product
             }
         });
     }
