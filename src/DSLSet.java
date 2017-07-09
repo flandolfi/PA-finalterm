@@ -10,7 +10,7 @@ public class DSLSet {
     public void addValue(Value value) { values.add(value); }
     public boolean contains(Value value) { return values.contains(value); }
     public HashSet<Value> getValues() { return new HashSet<>(values); }
-    public String getLabel() { return label; }
+    public String toString() { return label; }
 
     public boolean addRelation(DSLSet range, Relation relation) {
         return relations.putIfAbsent(range, relation) != null;
@@ -19,7 +19,7 @@ public class DSLSet {
     public Relation getRelationWith(DSLSet range) {
         return relations.getOrDefault(range, new Relation(this, range) {
             @Override
-            public HashSet<Value> getUnconstrainedValues(Value value) {
+            public HashSet<Value> getRelatableValues(Value value) {
                 return range.getValues(); // Cartesian Product
             }
         });
