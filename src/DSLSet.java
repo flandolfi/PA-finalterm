@@ -19,7 +19,7 @@ public class DSLSet {
             public boolean addPair(Value lValue, Value rValue) { return true; }
 
             @Override
-            public HashSet<Value> getSuccessorNeighborhoodOf(Value value) {
+            public HashSet<Value> getAfterSet(Value value) {
                 return range.getValues(); // Cartesian product
             }
         });

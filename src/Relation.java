@@ -2,7 +2,7 @@ import java.util.HashMap;
 import java.util.HashSet;
 
 public abstract class Relation {
-    protected final HashMap<Value, HashSet<Value>> relatesTo = new HashMap<>();
+    protected final HashMap<Value, HashSet<Value>> afterSets = new HashMap<>();
     protected final DSLSet domain;
     protected final DSLSet range;
 
@@ -14,5 +14,5 @@ public abstract class Relation {
     public DSLSet getDomain() { return domain; }
     public DSLSet getRange() { return range; }
     public abstract boolean addPair(Value lValue, Value rValue);
-    public abstract HashSet<Value> getSuccessorNeighborhoodOf(Value value);
+    public abstract HashSet<Value> getAfterSet(Value value);
 }

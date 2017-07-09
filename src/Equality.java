@@ -8,15 +8,15 @@ public class Equality extends Relation {
         if (!domain.contains(lValue) || !range.contains(rValue))
             return false;
 
-        relatesTo.computeIfAbsent(lValue, k -> new HashSet<>()).remove(rValue);
+        afterSets.computeIfAbsent(lValue, k -> new HashSet<>()).add(rValue);
         return true;
     }
 
     @Override
-    public HashSet<Value> getSuccessorNeighborhoodOf(Value value) {
+    public HashSet<Value> getAfterSet(Value value) {
         if (!domain.contains(value))
             return null;
 
-        return relatesTo.getOrDefault(value, new HashSet<>());
+        return afterSets.getOrDefault(value, new HashSet<>());
     }
 }
