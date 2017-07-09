@@ -23,33 +23,15 @@ public class Scanner {
     public Type getToken() throws ScannerException {
         try {
             switch (input.nextToken()) {
-                case StreamTokenizer.TT_EOF:
-                    return Type.EOF;
-
-                case StreamTokenizer.TT_WORD:
-                    return Type.WORD;
-
-                case StreamTokenizer.TT_NUMBER:
-                    return Type.NUM;
-
-                case '=':
-                    return Type.EQ;
-
-                case '{':
-                    return Type.O_BR;
-
-                case '}':
-                    return Type.C_BR;
-
-                case '(':
-                    return Type.O_PAR;
-
-                case ')':
-                    return Type.C_PAR;
-
-                case ',':
-                    return Type.COMMA;
-
+                case StreamTokenizer.TT_EOF: return Type.EOF;
+                case StreamTokenizer.TT_WORD: return Type.WORD;
+                case StreamTokenizer.TT_NUMBER: return Type.NUM;
+                case '=': return Type.EQ;
+                case '{': return Type.O_BR;
+                case '}': return Type.C_BR;
+                case '(': return Type.O_PAR;
+                case ')': return Type.C_PAR;
+                case ',': return Type.COMMA;
                 default:
                     throw new ScannerException("Unrecognized token: " + input.sval);
             }
