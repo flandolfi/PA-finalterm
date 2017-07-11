@@ -1,5 +1,5 @@
-public class ScannerException extends Exception {
-    public ScannerException(String message) {
+public class LexicalException extends Exception {
+    public LexicalException(String message) {
         super(message);
     }
 }

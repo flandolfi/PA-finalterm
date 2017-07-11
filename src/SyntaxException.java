@@ -1,5 +1,5 @@
-public class ParserException extends Exception {
-    public ParserException(String message) {
+public class SyntaxException extends Exception {
+    public SyntaxException(String message) {
         super(message);
     }
 }
