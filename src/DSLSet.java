@@ -17,11 +17,6 @@ public class DSLSet {
     }
 
     public Relation getRelationWith(DSLSet range) {
-        return relations.getOrDefault(range, new Relation(this, range) {
-            @Override
-            public HashSet<Value> getRelatableValues(Value value) {
-                return range.getValues(); // Cartesian Product
-            }
-        });
+        return relations.getOrDefault(range, new CartesianProduct(this, range));
     }
 }

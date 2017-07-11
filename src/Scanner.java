@@ -35,8 +35,8 @@ public class Scanner {
                 case ',': return Type.COMMA;
                 case '!': return Type.BANG;
                 default:
-                    throw new LexicalException("Line " + input.lineno() +
-                            ": Unrecognized token: '" + input.sval + "'");
+                    throw new LexicalException(printLineNo() +
+                            "Unrecognized token: '" + input.sval + "'");
             }
         } catch (IOException e) {
             return Type.EOF;
@@ -51,5 +51,5 @@ public class Scanner {
     }
 
     public String getTokenValue() { return input.sval; }
-    public int getLineNo() { return input.lineno(); }
+    public String printLineNo() { return "Line " + input.lineno() + ": "; }
 }

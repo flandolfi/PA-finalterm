@@ -12,19 +12,14 @@ public abstract class Relation {
     }
 
     public boolean addPair(Value lValue, Value rValue) {
-        if (!domain.contains(lValue) || !range.contains(rValue))
-            return false;
-
-        afterSets.computeIfAbsent(lValue, k -> new HashSet<>()).add(rValue);
-        return true;
+        return afterSets.computeIfAbsent(lValue, k -> new HashSet<>()).add(rValue);
     }
 
     public HashSet<Value> getAfterSet(Value value) {
-        return domain.contains(value) ?
-                afterSets.getOrDefault(value, new HashSet<>()) : null;
+        return afterSets.getOrDefault(value, new HashSet<>());
     }
 
     public DSLSet getDomain() { return domain; }
     public DSLSet getRange() { return range; }
-    public abstract HashSet<Value> getRelatableValues(Value value);
+    public abstract HashSet<Value> getRelatedValues(Value value);
 }
