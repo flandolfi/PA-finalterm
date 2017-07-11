@@ -12,4 +12,6 @@ public class Value {
     public String toString() { return domainName + label; }
     public String getDomainName() { return domainName; }
     public String getLabel() { return label; }
+    public int hashCode() { return toString().hashCode(); }
+    public boolean equals(Value value) { return toString().equals(value.toString()); }
 }
