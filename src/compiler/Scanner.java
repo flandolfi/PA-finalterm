@@ -13,7 +13,6 @@ public class Scanner {
         input.eolIsSignificant(false);
         input.wordChars('A', 'Z');
         input.wordChars('a', 'z');
-//        input.whitespaceChars(' ', ' ');
         input.ordinaryChar('=');
         input.ordinaryChar('{');
         input.ordinaryChar('}');
@@ -23,7 +22,7 @@ public class Scanner {
         input.ordinaryChar('!');
     }
 
-    public Type getToken() throws LexicalException {
+    public Type getToken() throws CompilerException {
         try {
             switch (input.nextToken()) {
                 case StreamTokenizer.TT_EOF: return Type.EOF;
@@ -37,7 +36,7 @@ public class Scanner {
                 case ',': return Type.COMMA;
                 case '!': return Type.BANG;
                 default:
-                    throw new LexicalException(printLineNo() +
+                    throw new CompilerException(printLineNo() +
                             "Unrecognized token: '" + input.sval + "'");
             }
         } catch (IOException e) {
@@ -45,7 +44,7 @@ public class Scanner {
         }
     }
 
-    public Type peek() throws LexicalException {
+    public Type peek() throws CompilerException {
         Type next = getToken();
         input.pushBack();
 

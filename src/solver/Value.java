@@ -9,7 +9,7 @@ public class Value {
         this.domainName = domainName;
     }
 
-    public String toString() { return label; }
+    public String toString() { return domainName + label; }
     public String getDomainName() { return domainName; }
     public String getLabel() { return label; }
 }

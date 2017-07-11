@@ -10,24 +10,22 @@ public class Parser {
     private HashMap<String, DSLSet> sets;
     private Type token;
 
-    public CSPGraph parse(Reader reader) throws LexicalException,
-            SyntaxException, WarningException {
+    public CSPGraph parse(Reader reader) throws CompilerException {
         scanner = new Scanner(reader);
         sets = new HashMap<>();
 
         return parseCSPGraph();
     }
 
-    private void expect(Type type) throws SyntaxException, LexicalException {
+    private void expect(Type type) throws CompilerException {
         token = scanner.getToken();
 
         if (token != type)
-            throw new SyntaxException(scanner.printLineNo() + "Expected: "
+            throw new CompilerException(scanner.printLineNo() + "Expected: "
                     + type + "; Found: " + token + ".");
     }
 
-    private CSPGraph parseCSPGraph() throws SyntaxException,
-            LexicalException, WarningException {
+    private CSPGraph parseCSPGraph() throws CompilerException {
         parseDList();
         parseRList();
         expect(Type.EOF);
@@ -35,7 +33,7 @@ public class Parser {
         return new CSPGraph(sets.values());
     }
 
-    private Value parseValue() throws SyntaxException, LexicalException {
+    private Value parseValue() throws CompilerException {
         expect(Type.WORD);
         String dName = scanner.getTokenValue();
         expect(Type.NUM);
@@ -43,22 +41,21 @@ public class Parser {
         return new Value(dName, scanner.getTokenValue());
     }
 
-    private void parseVList(DSLSet set) throws LexicalException,
-            SyntaxException, WarningException {
+    private void parseVList(DSLSet set) throws CompilerException {
         do {
             Value value = parseValue();
 
             if (!value.getDomainName().equals(set.toString()))
-                throw new SyntaxException(scanner.printLineNo() + "All value labels " +
-                        "must start with the name of the set they belong to.");
+                throw new CompilerException(scanner.printLineNo() + "All value " +
+                        "labels must start with the name of the set they belong to.");
 
             if (!set.addValue(value))
-                throw new WarningException(scanner.printLineNo()
-                        + "Set values should be unique.");
+                throw new CompilerException(scanner.printLineNo()
+                        + "Set values must be unique.");
         } while (scanner.peek() == Type.COMMA);
     }
 
-    private void parseDList() throws LexicalException, SyntaxException, WarningException {
+    private void parseDList() throws CompilerException {
         do {
             expect(Type.WORD);
             DSLSet set = new DSLSet(scanner.getTokenValue());
@@ -68,13 +65,13 @@ public class Parser {
             expect(Type.C_BR);
 
             if (sets.put(set.toString(), set) != null)
-                throw new SyntaxException(scanner.printLineNo()
+                throw new CompilerException(scanner.printLineNo()
                         + "Set names must be unique.");
         } while (scanner.peek() == Type.WORD);
     }
 
-    private void parseRList() throws LexicalException, SyntaxException, WarningException {
-        token = scanner.peek();
+    private void parseRList() throws CompilerException {
+        Type token = scanner.peek();
 
         while (token == Type.O_BR || token == Type.BANG) {
             if (token == Type.BANG)
@@ -90,12 +87,12 @@ public class Parser {
             expect(Type.C_BR);
 
             if (!domain.addRelation(range, relation))
-                throw new SyntaxException(scanner.printLineNo()
+                throw new CompilerException(scanner.printLineNo()
                         + "Can not define multiple relations between two sets.");
         }
     }
 
-    private Pair<Value, Value> parsePair() throws SyntaxException, LexicalException {
+    private Pair<Value, Value> parsePair() throws CompilerException {
         expect(Type.O_PAR);
         Value lValue = parseValue();
         expect(Type.COMMA);
@@ -105,19 +102,18 @@ public class Parser {
         return new Pair<>(lValue, rValue);
     }
 
-    private void parsePList(Relation relation) throws SyntaxException,
-            LexicalException, WarningException {
+    private void parsePList(Relation relation) throws CompilerException {
         do {
             Pair<Value, Value> pair = parsePair();
 
             if (!relation.getDomain().contains(pair.getKey()) ||
                     !relation.getRange().contains(pair.getValue()))
-                throw new SyntaxException(scanner.printLineNo()
+                throw new CompilerException(scanner.printLineNo()
                         + "Mixed domains/ranges are not allowed.");
 
             if (!relation.addPair(pair.getKey(), pair.getValue()))
-                throw new WarningException(scanner.printLineNo()
-                        + "Relation pairs should be unique.");
+                throw new CompilerException(scanner.printLineNo()
+                        + "Relation pairs must be unique.");
         } while (scanner.peek() == Type.COMMA);
     }
 }
