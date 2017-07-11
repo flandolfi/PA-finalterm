@@ -1,3 +1,5 @@
+package solver;
+
 import java.util.HashSet;
 
 public class EqConstraint extends Relation {

@@ -1,3 +1,5 @@
+package solver;
+
 public class Value {
     private final String label;
     private final String domainName;

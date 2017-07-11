@@ -1,6 +1,9 @@
+package compiler;
+
 import javafx.util.Pair;
 import java.io.Reader;
 import java.util.HashMap;
+import solver.*;
 
 public class Parser {
     private Scanner scanner;
