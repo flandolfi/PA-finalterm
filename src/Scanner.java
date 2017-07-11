@@ -18,9 +18,10 @@ public class Scanner {
         input.ordinaryChar(',');
         input.ordinaryChar('(');
         input.ordinaryChar(')');
+        input.ordinaryChar('!');
     }
 
-    public Type getToken() throws ScannerException {
+    public Type getToken() throws LexicalException {
         try {
             switch (input.nextToken()) {
                 case StreamTokenizer.TT_EOF: return Type.EOF;
@@ -32,13 +33,23 @@ public class Scanner {
                 case '(': return Type.O_PAR;
                 case ')': return Type.C_PAR;
                 case ',': return Type.COMMA;
+                case '!': return Type.BANG;
                 default:
-                    throw new ScannerException("Unrecognized token: " + input.sval);
+                    throw new LexicalException("Line " + input.lineno() +
+                            ": Unrecognized token: '" + input.sval + "'");
             }
         } catch (IOException e) {
             return Type.EOF;
         }
     }
 
+    public Type peek() throws LexicalException {
+        Type next = getToken();
+        input.pushBack();
+
+        return next;
+    }
+
     public String getTokenValue() { return input.sval; }
+    public int getLineNo() { return input.lineno(); }
 }
