@@ -10,11 +10,11 @@ public class Parser {
     private HashMap<String, DSLSet> sets;
     private Type token;
 
-    public CSPGraph parse(Reader reader) throws CompilerException {
+    public Solver parse(Reader reader) throws CompilerException {
         scanner = new Scanner(reader);
         sets = new HashMap<>();
 
-        return parseCSPGraph();
+        return parseSolver();
     }
 
     private void expect(Type type) throws CompilerException {
@@ -25,12 +25,12 @@ public class Parser {
                     + type + "; Found: " + token + ".");
     }
 
-    private CSPGraph parseCSPGraph() throws CompilerException {
+    private Solver parseSolver() throws CompilerException {
         parseDList();
         parseRList();
         expect(Type.EOF);
 
-        return new CSPGraph(sets.values());
+        return new Solver(sets.values());
     }
 
     private Value parseValue() throws CompilerException {
