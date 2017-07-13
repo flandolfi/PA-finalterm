@@ -3,6 +3,7 @@ package compiler;
 import javafx.util.Pair;
 import java.io.Reader;
 import java.util.HashMap;
+
 import solver.*;
 
 public class Parser {
@@ -26,6 +27,7 @@ public class Parser {
     }
 
     private Solver parseSolver() throws CompilerException {
+        parseDomain();
         parseDList();
         parseRList();
         expect(Type.EOF);
@@ -35,39 +37,54 @@ public class Parser {
 
     private Value parseValue() throws CompilerException {
         expect(Type.WORD);
-        String dName = scanner.getTokenValue();
-        expect(Type.NUM);
+        String value = scanner.getTokenValue();
 
-        return new Value(dName, scanner.getTokenValue());
+        if (!value.matches("[A-Za-z]+[0-9]+"))
+            throw new CompilerException(scanner.printLineNo() + "All value " +
+                    "labels must start with the name of the set they belong " +
+                    "to, followed by a number.");
+
+        String[] tokens = value.split("(?<=[A-Za-z])(?=[0-9])");
+
+        return new Value(tokens[0], tokens[1]);
+    }
+
+    private void parseDValue(DSLSet set) throws CompilerException {
+        Value value = parseValue();
+
+        if (!value.getDomainName().equals(set.toString()))
+            throw new CompilerException(scanner.printLineNo() + "All value " +
+                    "labels must start with the name of the set they belong to.");
+
+        if (!set.addValue(value))
+            throw new CompilerException(scanner.printLineNo()
+                    + "Set values must be unique.");
     }
 
     private void parseVList(DSLSet set) throws CompilerException {
-        do {
-            Value value = parseValue();
+        while (scanner.peek() == Type.COMMA) {
+            scanner.getToken();
+            parseDValue(set);
+        }
+    }
 
-            if (!value.getDomainName().equals(set.toString()))
-                throw new CompilerException(scanner.printLineNo() + "All value " +
-                        "labels must start with the name of the set they belong to.");
+    private void parseDomain() throws CompilerException {
+        expect(Type.WORD);
+        DSLSet set = new DSLSet(scanner.getTokenValue());
+        expect(Type.EQ);
+        expect(Type.O_BR);
+        parseDValue(set);
+        parseVList(set);
+        expect(Type.C_BR);
 
-            if (!set.addValue(value))
-                throw new CompilerException(scanner.printLineNo()
-                        + "Set values must be unique.");
-        } while (scanner.peek() == Type.COMMA);
+        if (sets.put(set.toString(), set) != null)
+            throw new CompilerException(scanner.printLineNo()
+                    + "Set names must be unique.");
     }
 
     private void parseDList() throws CompilerException {
-        do {
-            expect(Type.WORD);
-            DSLSet set = new DSLSet(scanner.getTokenValue());
-            expect(Type.EQ);
-            expect(Type.O_BR);
-            parseVList(set);
-            expect(Type.C_BR);
-
-            if (sets.put(set.toString(), set) != null)
-                throw new CompilerException(scanner.printLineNo()
-                        + "Set names must be unique.");
-        } while (scanner.peek() == Type.WORD);
+        while (scanner.peek() == Type.WORD)
+            parseDomain();
     }
 
     private void parseRList() throws CompilerException {
@@ -85,6 +102,7 @@ public class Parser {
                     : new DiffConstraint(domain, range);
             parsePList(relation);
             expect(Type.C_BR);
+            token = scanner.peek();
 
             if (!domain.addRelation(range, relation))
                 throw new CompilerException(scanner.printLineNo()
@@ -103,7 +121,8 @@ public class Parser {
     }
 
     private void parsePList(Relation relation) throws CompilerException {
-        do {
+        while (scanner.peek() == Type.COMMA) {
+            scanner.getToken();
             Pair<Value, Value> pair = parsePair();
 
             if (!relation.getDomain().contains(pair.getKey()) ||
@@ -114,6 +133,6 @@ public class Parser {
             if (!relation.addPair(pair.getKey(), pair.getValue()))
                 throw new CompilerException(scanner.printLineNo()
                         + "Relation pairs must be unique.");
-        } while (scanner.peek() == Type.COMMA);
+        }
     }
 }

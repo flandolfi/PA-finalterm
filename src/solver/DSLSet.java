@@ -15,7 +15,7 @@ public class DSLSet {
     public String toString() { return label; }
 
     public boolean addRelation(DSLSet range, Relation relation) {
-        return relations.putIfAbsent(range, relation) != null;
+        return relations.putIfAbsent(range, relation) == null;
     }
 
     public Relation getRelationWith(DSLSet range) {

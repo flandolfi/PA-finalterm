@@ -20,6 +20,8 @@ public class Scanner {
         input.ordinaryChar('(');
         input.ordinaryChar(')');
         input.ordinaryChar('!');
+        input.whitespaceChars(0x00, 0x20);
+        input.parseNumbers();
     }
 
     public Type getToken() throws CompilerException {
@@ -27,7 +29,6 @@ public class Scanner {
             switch (input.nextToken()) {
                 case StreamTokenizer.TT_EOF: return Type.EOF;
                 case StreamTokenizer.TT_WORD: return Type.WORD;
-                case StreamTokenizer.TT_NUMBER: return Type.NUM;
                 case '=': return Type.EQ;
                 case '{': return Type.O_BR;
                 case '}': return Type.C_BR;
@@ -37,7 +38,7 @@ public class Scanner {
                 case '!': return Type.BANG;
                 default:
                     throw new CompilerException(printLineNo() +
-                            "Unrecognized token: '" + input.sval + "'");
+                            "Unrecognized token: '" + input.ttype + "'");
             }
         } catch (IOException e) {
             return Type.EOF;
