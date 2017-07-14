@@ -4,6 +4,7 @@ import java.io.BufferedReader;
 import java.io.FileNotFoundException;
 import java.io.FileReader;
 import java.util.*;
+import java.util.function.Supplier;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
@@ -22,19 +23,21 @@ public class Solver {
 
     private Stream<List<Value>> backtrack(
             List<Set<Value>> solutionSets, int step) {
-        if (step == sets.size())
+        if (step == sets.size()) {
+            System.out.println("RETRIEVED NEW SOLUTION");
             return Stream.of((List<Value>) solutionSets.stream()
                     .map(s -> s.iterator().next())
                     .collect(Collectors.toCollection(ArrayList::new)));
+        }
 
         Stream<List<Value>> solutions = Stream.empty();
 
         loop: for (Value value: solutionSets.get(step)) {
-            List<Set<Value>> newSolSets = solutionSets.subList(0, step);
+            List<Set<Value>> newSolSets = new ArrayList<>(solutionSets.subList(0, step));
             newSolSets.add(new HashSet<>(Collections.singleton(value)));
 
             for (int i = 0; i < step; i++)
-                if (sets.get(step).getRelationWith(sets.get(i))
+                if (!sets.get(step).getRelationWith(sets.get(i))
                         .getRelatedValues(value).containsAll(newSolSets.get(i)))
                     continue loop;
 
@@ -47,7 +50,10 @@ public class Solver {
                     continue loop;
             }
 
-            solutions = Stream.concat(solutions, backtrack(newSolSets, step + 1));
+            final Stream<List<Value>> oldSolutions = solutions;
+            solutions = Stream.<Supplier<Stream<List<Value>>>>of(
+                    () -> oldSolutions,
+                    () -> backtrack(newSolSets, step + 1)).flatMap(Supplier::get);
         }
 
         return solutions;
@@ -96,7 +102,8 @@ public class Solver {
 
                     message.append(" }\n");
                 } else
-                    message.append(" - No constraints with ").append(sets.get(j));
+                    message.append(" - No constraints with ")
+                            .append(sets.get(j)).append("\n");
             }
         }
 
