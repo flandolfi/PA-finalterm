@@ -27,7 +27,6 @@ public class Parser {
     }
 
     private Solver parseSolver() throws CompilerException {
-        parseDomain();
         parseDList();
         parseRList();
         expect(Type.EOF);
@@ -49,7 +48,7 @@ public class Parser {
         return new Value(tokens[0], tokens[1]);
     }
 
-    private void parseDValue(DSLSet set) throws CompilerException {
+    private void parseVList(DSLSet set) throws CompilerException {
         Value value = parseValue();
 
         if (!value.getDomainName().equals(set.toString()))
@@ -59,54 +58,56 @@ public class Parser {
         if (!set.addValue(value))
             throw new CompilerException(scanner.printLineNo()
                     + "Set values must be unique.");
-    }
 
-    private void parseVList(DSLSet set) throws CompilerException {
-        while (scanner.peek() == Type.COMMA) {
+        if (scanner.peek() == Type.COMMA) {
             scanner.getToken();
-            parseDValue(set);
+            parseVList(set);
         }
     }
 
-    private void parseDomain() throws CompilerException {
+    private void parseDList() throws CompilerException {
         expect(Type.WORD);
         DSLSet set = new DSLSet(scanner.getTokenValue());
+
+        if (!set.toString().matches("[A-Za-z]+"))
+            throw new CompilerException(scanner.printLineNo()
+                    + "Set names must be literal.");
+
         expect(Type.EQ);
         expect(Type.O_BR);
-        parseDValue(set);
         parseVList(set);
         expect(Type.C_BR);
 
         if (sets.put(set.toString(), set) != null)
             throw new CompilerException(scanner.printLineNo()
                     + "Set names must be unique.");
-    }
 
-    private void parseDList() throws CompilerException {
-        while (scanner.peek() == Type.WORD)
-            parseDomain();
+        if (scanner.peek() == Type.WORD)
+            parseDList();
     }
 
     private void parseRList() throws CompilerException {
         Type token = scanner.peek();
 
-        while (token == Type.O_BR || token == Type.BANG) {
-            if (token == Type.BANG)
-                scanner.getToken();
+        switch (token) {
+            case BANG: scanner.getToken();
+            case O_BR:
+                expect(Type.O_BR);
+                Pair<Value, Value> pair = parsePair();
+                DSLSet domain = sets.get(pair.getKey().getDomainName());
+                DSLSet range = sets.get(pair.getValue().getDomainName());
+                Relation relation = token == Type.O_BR? new EqConstraint(domain, range)
+                        : new DiffConstraint(domain, range);
+                relation.addPair(pair.getKey(), pair.getValue());
+                parsePList(relation);
+                expect(Type.C_BR);
 
-            expect(Type.O_BR);
-            Pair<Value, Value> pair = parsePair();
-            DSLSet domain = sets.get(pair.getKey().getDomainName());
-            DSLSet range = sets.get(pair.getValue().getDomainName());
-            Relation relation = token == Type.O_BR? new EqConstraint(domain, range)
-                    : new DiffConstraint(domain, range);
-            parsePList(relation);
-            expect(Type.C_BR);
-            token = scanner.peek();
+                if (!domain.addRelation(range, relation))
+                    throw new CompilerException(scanner.printLineNo()
+                            + "Can not define multiple relations between two sets.");
 
-            if (!domain.addRelation(range, relation))
-                throw new CompilerException(scanner.printLineNo()
-                        + "Can not define multiple relations between two sets.");
+                parseRList();
+                break;
         }
     }
 

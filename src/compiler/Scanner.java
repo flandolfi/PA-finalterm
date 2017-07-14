@@ -13,6 +13,7 @@ public class Scanner {
         input.eolIsSignificant(false);
         input.wordChars('A', 'Z');
         input.wordChars('a', 'z');
+        input.wordChars('0', '9');
         input.ordinaryChar('=');
         input.ordinaryChar('{');
         input.ordinaryChar('}');
@@ -21,7 +22,6 @@ public class Scanner {
         input.ordinaryChar(')');
         input.ordinaryChar('!');
         input.whitespaceChars(0x00, 0x20);
-        input.parseNumbers();
     }
 
     public Type getToken() throws CompilerException {
