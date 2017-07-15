@@ -4,7 +4,6 @@ import java.io.BufferedReader;
 import java.io.FileNotFoundException;
 import java.io.FileReader;
 import java.util.*;
-import java.util.function.Supplier;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
@@ -16,47 +15,44 @@ public class Solver {
     public Solver(Collection<DSLSet> sets) { this.sets = new ArrayList<>(sets); }
 
     public List<Value> backtrackingSearch() {
-        Enumeration<List<Value>> enumeration = enumeration();
-
-        return enumeration.hasMoreElements()? enumeration.nextElement() : null;
+        return backtrack(new LinkedList<>(), sets.stream()
+                .map(DSLSet::getValues)
+                .collect(Collectors.toCollection(LinkedList::new)));
     }
 
-    private Stream<List<Value>> backtrack(
-            List<Set<Value>> solutionSets, int step) {
-        if (step == sets.size()) {
-            System.out.println("RETRIEVED NEW SOLUTION");
-            return Stream.of((List<Value>) solutionSets.stream()
-                    .map(s -> s.iterator().next())
-                    .collect(Collectors.toCollection(ArrayList::new)));
-        }
+    private List<Value> backtrack(LinkedList<Value> solution,
+            LinkedList<Set<Value>> solutionSets) {
+        int step = solution.size();
 
-        Stream<List<Value>> solutions = Stream.empty();
+        if (step == sets.size())
+            return solution;
 
-        loop: for (Value value: solutionSets.get(step)) {
-            List<Set<Value>> newSolSets = new ArrayList<>(solutionSets.subList(0, step));
-            newSolSets.add(new HashSet<>(Collections.singleton(value)));
-
+        loop: for (Value value: solutionSets.getFirst()) {
             for (int i = 0; i < step; i++)
                 if (!sets.get(step).getRelationWith(sets.get(i))
-                        .getRelatedValues(value).containsAll(newSolSets.get(i)))
+                        .getRelatedValues(value).contains(solution.get(i)))
                     continue loop;
 
+            LinkedList<Set<Value>> nextSolutionSets = new LinkedList<>();
+
             for (int i = step + 1; i < sets.size() ; i++) {
-                newSolSets.add(new HashSet<>(solutionSets.get(i)));
-                newSolSets.get(i).retainAll(sets.get(step)
+                nextSolutionSets.add(new HashSet<>(solutionSets.get(i - step)));
+                nextSolutionSets.getLast().retainAll(sets.get(step)
                         .getRelationWith(sets.get(i)).getRelatedValues(value));
 
-                if (newSolSets.get(i).isEmpty())
+                if (nextSolutionSets.getLast().isEmpty())
                     continue loop;
             }
 
-            final Stream<List<Value>> oldSolutions = solutions;
-            solutions = Stream.<Supplier<Stream<List<Value>>>>of(
-                    () -> oldSolutions,
-                    () -> backtrack(newSolSets, step + 1)).flatMap(Supplier::get);
+            solution.add(value);
+
+            if (backtrack(solution, nextSolutionSets) != null)
+                return solution;
+
+            solution.removeLast();
         }
 
-        return solutions;
+        return null;
     }
 
     public String explain(List<Value> solution) {
@@ -112,9 +108,10 @@ public class Solver {
 
     public Enumeration<List<Value>> enumeration() {
         return new Enumeration<List<Value>>() {
-            private Iterator<List<Value>> iterator = backtrack(sets.stream()
-                    .map(DSLSet::getValues)
-                    .collect(Collectors.toCollection(ArrayList::new)), 0).iterator();
+            private Iterator<List<Value>> iterator =
+                    streamBacktrack(new LinkedList<>(), sets.stream()
+                            .map(DSLSet::getValues).collect(Collectors
+                                    .toCollection(LinkedList::new))).iterator();
 
             @Override
             public boolean hasMoreElements() { return iterator.hasNext(); }
@@ -122,6 +119,39 @@ public class Solver {
             @Override
             public List<Value> nextElement() { return iterator.next(); }
         };
+    }
+
+    private Stream<List<Value>> streamBacktrack(LinkedList<Value> solution,
+                                          LinkedList<Set<Value>> solutionSets) {
+        int step = solution.size();
+        LinkedList<Set<Value>> nextSolutionSets = new LinkedList<>();
+        LinkedList<Value> nextSolution = new LinkedList<>(solution);
+        nextSolution.add(null);
+
+        return step == sets.size()? Stream.of(solution) : solutionSets.getFirst()
+                .stream().filter(v -> {
+                    for (int i = 0; i < step; i++)
+                        if (!sets.get(step).getRelationWith(sets.get(i))
+                                .getRelatedValues(v).contains(solution.get(i)))
+                            return false;
+
+                    nextSolutionSets.clear();
+
+                    for (int i = step + 1; i < sets.size() ; i++) {
+                        nextSolutionSets.add(new HashSet<>(solutionSets.get(i - step)));
+                        nextSolutionSets.getLast().retainAll(sets.get(step)
+                                .getRelationWith(sets.get(i)).getRelatedValues(v));
+
+                        if (nextSolutionSets.getLast().isEmpty())
+                            return false;
+                    }
+
+                    return true;
+                }).flatMap(v -> {
+                    nextSolution.set(step, v);
+
+                    return streamBacktrack(nextSolution, nextSolutionSets);
+                });
     }
 
     public static void main(String[] args) {
