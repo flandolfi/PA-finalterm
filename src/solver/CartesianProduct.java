@@ -7,7 +7,7 @@ public class CartesianProduct extends Relation {
     public HashSet<Value> getAfterSet(Value value) { return range.getValues(); }
 
     @Override
-    public HashSet<Value> getRelatedValues(Value value) {
+    public HashSet<Value> getAdjacencySet(Value value) {
         return range.getValues();
     }
 

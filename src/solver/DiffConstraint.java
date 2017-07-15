@@ -6,7 +6,7 @@ public class DiffConstraint extends Relation {
     public DiffConstraint(DSLSet domain, DSLSet range) { super(domain, range); }
 
     @Override
-    public HashSet<Value> getRelatedValues(Value value) {
+    public HashSet<Value> getAdjacencySet(Value value) {
         HashSet<Value> values = range.getValues();
         values.removeAll(getAfterSet(value));
 

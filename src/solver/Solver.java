@@ -40,7 +40,7 @@ public class Solver implements Enumeration<List<Value>> {
             Value value = iterators.getLast().next();
             for (int i = 0; i < step; i++)
                 if (!sets.get(step).getRelationWith(sets.get(i))
-                        .getRelatedValues(value).contains(next.get(i)))
+                        .getAdjacencySet(value).contains(next.get(i)))
                     continue loop;
 
             LinkedList<Set<Value>> nextSolutionSets = new LinkedList<>();
@@ -48,7 +48,7 @@ public class Solver implements Enumeration<List<Value>> {
             for (int i = step + 1; i < sets.size() ; i++) {
                 nextSolutionSets.add(new HashSet<>(stack.getLast().get(i - step)));
                 nextSolutionSets.getLast().retainAll(sets.get(step)
-                        .getRelationWith(sets.get(i)).getRelatedValues(value));
+                        .getRelationWith(sets.get(i)).getAdjacencySet(value));
 
                 if (nextSolutionSets.getLast().isEmpty())
                     continue loop;
