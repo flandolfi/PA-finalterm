@@ -1,78 +1,64 @@
-AA = { AA1 }        BD = { BD1 }        DB = { DB1 }         CC = { CC1 }
-AB = { AB1, AB2, AB3, AB4 }         CA = { CA1, CA2, CA3, CA4 }
-AC = { AC1, AC2, AC3, AC4 }         CB = { CB1, CB2, CB3, CB4 }
-AD = { AD1, AD2, AD3, AD4 }         CD = { CD1, CD2, CD3, CD4 }
-BA = { BA1, BA2, BA3, BA4 }         DA = { DA1, DA2, DA3, DA4 }
-BB = { BB1, BB2, BB3, BB4 }         DC = { DC1, DC2, DC3, DC4 }
-BC = { BC1, BC2, BC3, BC4 }         DD = { DD1, DD2, DD3, DD4 }
+AA = {AA1}          BD = {BD1}          DB = {DB1}          CC = {CC1}
+AB = {AB1, AB2, AB3, AB4}         CA = {CA1, CA2, CA3, CA4}
+AC = {AC1, AC2, AC3, AC4}         CB = {CB1, CB2, CB3, CB4}
+AD = {AD1, AD2, AD3, AD4}         CD = {CD1, CD2, CD3, CD4}
+BA = {BA1, BA2, BA3, BA4}         DA = {DA1, DA2, DA3, DA4}
+BB = {BB1, BB2, BB3, BB4}         DC = {DC1, DC2, DC3, DC4}
+BC = {BC1, BC2, BC3, BC4}         DD = {DD1, DD2, DD3, DD4}
 
-!{ (AA1, BA1) } !{ (AA1, CA1) } !{ (AA1, DA1) } !{ (AA1, AB1) }
-!{ (AA1, AC1) } !{ (AA1, AD1) } !{ (AB1, DB1) } !{ (AB1, AA1) }
-!{ (AC1, CC1) } !{ (AC1, AA1) } !{ (AD1, BD1) } !{ (AD1, AA1) }
-!{ (BA1, AA1) } !{ (BA1, BD1) } !{ (BB1, DB1) } !{ (BB1, BD1) }
-!{ (BC1, BD1) } !{ (BC1, CC1) } !{ (BD1, AD1) } !{ (BD1, CD1) }
-!{ (BD1, DD1) } !{ (BD1, BA1) } !{ (BD1, BB1) } !{ (BD1, BC1) }
-!{ (CA1, AA1) } !{ (CA1, CC1) } !{ (CB1, DB1) } !{ (CB1, CC1) }
-!{ (CC1, AC1) } !{ (CC1, BC1) } !{ (CC1, DC1) } !{ (CC1, CA1) }
-!{ (CC1, CB1) } !{ (CC1, CD1) } !{ (CD1, BD1) } !{ (CD1, CC1) }
-!{ (DA1, AA1) } !{ (DA1, DB1) } !{ (DB1, AB1) } !{ (DB1, BB1) }
-!{ (DB1, CB1) } !{ (DB1, DA1) } !{ (DB1, DC1) } !{ (DB1, DD1) }
-!{ (DC1, CC1) } !{ (DC1, DB1) } !{ (DD1, BD1) } !{ (DD1, DB1) }
-!{ (AA1, BB1) } !{ (BB1, AA1) } !{ (CC1, DD1) } !{ (DD1, CC1) }
-!{ (BD1, AC1) } !{ (AC1, BD1) } !{ (DB1, CA1) } !{ (CA1, DB1) }
-!{ (AB1, CB1), (AB2, CB2), (AB3, CB3), (AB4, CB4) }
-!{ (AB1, BB1), (AB2, BB2), (AB3, BB3), (AB4, BB4) }
-!{ (AB1, AC1), (AB2, AC2), (AB3, AC3), (AB4, AC4) }
-!{ (AB1, AD1), (AB2, AD2), (AB3, AD3), (AB4, AD4) }
-!{ (AC1, BC1), (AC2, BC2), (AC3, BC3), (AC4, BC4) }
-!{ (AC1, DC1), (AC2, DC2), (AC3, DC3), (AC4, DC4) }
-!{ (AC1, AB1), (AC2, AB2), (AC3, AB3), (AC4, AB4) }
-!{ (AC1, AD1), (AC2, AD2), (AC3, AD3), (AC4, AD4) }
-!{ (AD1, CD1), (AD2, CD2), (AD3, CD3), (AD4, CD4) }
-!{ (AD1, DD1), (AD2, DD2), (AD3, DD3), (AD4, DD4) }
-!{ (AD1, AB1), (AD2, AB2), (AD3, AB3), (AD4, AB4) }
-!{ (AD1, AC1), (AD2, AC2), (AD3, AC3), (AD4, AC4) }
-!{ (BA1, CA1), (BA2, CA2), (BA3, CA3), (BA4, CA4) }
-!{ (BA1, DA1), (BA2, DA2), (BA3, DA3), (BA4, DA4) }
-!{ (BA1, BB1), (BA2, BB2), (BA3, BB3), (BA4, BB4) }
-!{ (BA1, BC1), (BA2, BC2), (BA3, BC3), (BA4, BC4) }
-!{ (BB1, AB1), (BB2, AB2), (BB3, AB3), (BB4, AB4) }
-!{ (BB1, CB1), (BB2, CB2), (BB3, CB3), (BB4, CB4) }
-!{ (BB1, BA1), (BB2, BA2), (BB3, BA3), (BB4, BA4) }
-!{ (BB1, BC1), (BB2, BC2), (BB3, BC3), (BB4, BC4) }
-!{ (BC1, AC1), (BC2, AC2), (BC3, AC3), (BC4, AC4) }
-!{ (BC1, DC1), (BC2, DC2), (BC3, DC3), (BC4, DC4) }
-!{ (BC1, BA1), (BC2, BA2), (BC3, BA3), (BC4, BA4) }
-!{ (BC1, BB1), (BC2, BB2), (BC3, BB3), (BC4, BB4) }
-!{ (CA1, BA1), (CA2, BA2), (CA3, BA3), (CA4, BA4) }
-!{ (CA1, DA1), (CA2, DA2), (CA3, DA3), (CA4, DA4) }
-!{ (CA1, CB1), (CA2, CB2), (CA3, CB3), (CA4, CB4) }
-!{ (CA1, CD1), (CA2, CD2), (CA3, CD3), (CA4, CD4) }
-!{ (CB1, AB1), (CB2, AB2), (CB3, AB3), (CB4, AB4) }
-!{ (CB1, BB1), (CB2, BB2), (CB3, BB3), (CB4, BB4) }
-!{ (CB1, CA1), (CB2, CA2), (CB3, CA3), (CB4, CA4) }
-!{ (CB1, CD1), (CB2, CD2), (CB3, CD3), (CB4, CD4) }
-!{ (CD1, AD1), (CD2, AD2), (CD3, AD3), (CD4, AD4) }
-!{ (CD1, DD1), (CD2, DD2), (CD3, DD3), (CD4, DD4) }
-!{ (CD1, CA1), (CD2, CA2), (CD3, CA3), (CD4, CA4) }
-!{ (CD1, CB1), (CD2, CB2), (CD3, CB3), (CD4, CB4) }
-!{ (DA1, BA1), (DA2, BA2), (DA3, BA3), (DA4, BA4) }
-!{ (DA1, CA1), (DA2, CA2), (DA3, CA3), (DA4, CA4) }
-!{ (DA1, DC1), (DA2, DC2), (DA3, DC3), (DA4, DC4) }
-!{ (DA1, DD1), (DA2, DD2), (DA3, DD3), (DA4, DD4) }
-!{ (DC1, AC1), (DC2, AC2), (DC3, AC3), (DC4, AC4) }
-!{ (DC1, BC1), (DC2, BC2), (DC3, BC3), (DC4, BC4) }
-!{ (DC1, DA1), (DC2, DA2), (DC3, DA3), (DC4, DA4) }
-!{ (DC1, DD1), (DC2, DD2), (DC3, DD3), (DC4, DD4) }
-!{ (DD1, AD1), (DD2, AD2), (DD3, AD3), (DD4, AD4) }
-!{ (DD1, CD1), (DD2, CD2), (DD3, CD3), (DD4, CD4) }
-!{ (DD1, DA1), (DD2, DA2), (DD3, DA3), (DD4, DA4) }
-!{ (DD1, DC1), (DD2, DC2), (DD3, DC3), (DD4, DC4) }
-!{ (AB1, BA1), (AB2, BA2), (AB3, BA3), (AB4, BA4) }
-!{ (BA1, AB1), (BA2, AB2), (BA3, AB3), (BA4, AB4) }
-!{ (CB1, DA1), (CB2, DA2), (CB3, DA3), (CB4, DA4) }
-!{ (DA1, CB1), (DA2, CB2), (DA3, CB3), (DA4, CB4) }
-!{ (BC1, AD1), (BC2, AD2), (BC3, AD3), (BC4, AD4) }
-!{ (AD1, BC1), (AD2, BC2), (AD3, BC3), (AD4, BC4) }
-!{ (DC1, CD1), (DC2, CD2), (DC3, CD3), (DC4, CD4) }
-!{ (CD1, DC1), (CD2, DC2), (CD3, DC3), (CD4, DC4) }
+!{(AB1, CB1), (AB2, CB2), (AB3, CB3), (AB4, CB4)}       !{(AA1, BA1)}
+!{(AB1, BB1), (AB2, BB2), (AB3, BB3), (AB4, BB4)}       !{(AA1, CA1)}
+!{(AB1, AC1), (AB2, AC2), (AB3, AC3), (AB4, AC4)}       !{(AA1, DA1)}
+!{(AB1, AD1), (AB2, AD2), (AB3, AD3), (AB4, AD4)}       !{(AA1, AB1)}
+!{(AC1, BC1), (AC2, BC2), (AC3, BC3), (AC4, BC4)}       !{(AA1, AC1)}
+!{(AC1, DC1), (AC2, DC2), (AC3, DC3), (AC4, DC4)}       !{(AA1, AD1)}
+!{(AC1, AB1), (AC2, AB2), (AC3, AB3), (AC4, AB4)}       !{(AB1, DB1)}
+!{(AC1, AD1), (AC2, AD2), (AC3, AD3), (AC4, AD4)}       !{(AB1, AA1)}
+!{(AD1, CD1), (AD2, CD2), (AD3, CD3), (AD4, CD4)}       !{(AC1, CC1)}
+!{(AD1, DD1), (AD2, DD2), (AD3, DD3), (AD4, DD4)}       !{(AC1, AA1)}
+!{(AD1, AB1), (AD2, AB2), (AD3, AB3), (AD4, AB4)}       !{(AD1, BD1)}
+!{(AD1, AC1), (AD2, AC2), (AD3, AC3), (AD4, AC4)}       !{(AD1, AA1)}
+!{(BA1, CA1), (BA2, CA2), (BA3, CA3), (BA4, CA4)}       !{(BA1, AA1)}
+!{(BA1, DA1), (BA2, DA2), (BA3, DA3), (BA4, DA4)}       !{(BA1, BD1)}
+!{(BA1, BB1), (BA2, BB2), (BA3, BB3), (BA4, BB4)}       !{(BB1, DB1)}
+!{(BA1, BC1), (BA2, BC2), (BA3, BC3), (BA4, BC4)}       !{(BB1, BD1)}
+!{(BB1, AB1), (BB2, AB2), (BB3, AB3), (BB4, AB4)}       !{(BC1, BD1)}
+!{(BB1, CB1), (BB2, CB2), (BB3, CB3), (BB4, CB4)}       !{(BC1, CC1)}
+!{(BB1, BA1), (BB2, BA2), (BB3, BA3), (BB4, BA4)}       !{(BD1, AD1)}
+!{(BB1, BC1), (BB2, BC2), (BB3, BC3), (BB4, BC4)}       !{(BD1, CD1)}
+!{(BC1, AC1), (BC2, AC2), (BC3, AC3), (BC4, AC4)}       !{(BD1, DD1)}
+!{(BC1, DC1), (BC2, DC2), (BC3, DC3), (BC4, DC4)}       !{(BD1, BA1)}
+!{(BC1, BA1), (BC2, BA2), (BC3, BA3), (BC4, BA4)}       !{(BD1, BB1)}
+!{(BC1, BB1), (BC2, BB2), (BC3, BB3), (BC4, BB4)}       !{(BD1, BC1)}
+!{(CA1, BA1), (CA2, BA2), (CA3, BA3), (CA4, BA4)}       !{(CA1, AA1)}
+!{(CA1, DA1), (CA2, DA2), (CA3, DA3), (CA4, DA4)}       !{(CA1, CC1)}
+!{(CA1, CB1), (CA2, CB2), (CA3, CB3), (CA4, CB4)}       !{(CB1, DB1)}
+!{(CA1, CD1), (CA2, CD2), (CA3, CD3), (CA4, CD4)}       !{(CB1, CC1)}
+!{(CB1, AB1), (CB2, AB2), (CB3, AB3), (CB4, AB4)}       !{(CC1, AC1)}
+!{(CB1, BB1), (CB2, BB2), (CB3, BB3), (CB4, BB4)}       !{(CC1, BC1)}
+!{(CB1, CA1), (CB2, CA2), (CB3, CA3), (CB4, CA4)}       !{(CC1, DC1)}
+!{(CB1, CD1), (CB2, CD2), (CB3, CD3), (CB4, CD4)}       !{(CC1, CA1)}
+!{(CD1, AD1), (CD2, AD2), (CD3, AD3), (CD4, AD4)}       !{(CC1, CB1)}
+!{(CD1, DD1), (CD2, DD2), (CD3, DD3), (CD4, DD4)}       !{(CC1, CD1)}
+!{(CD1, CA1), (CD2, CA2), (CD3, CA3), (CD4, CA4)}       !{(CD1, BD1)}
+!{(CD1, CB1), (CD2, CB2), (CD3, CB3), (CD4, CB4)}       !{(CD1, CC1)}
+!{(DA1, BA1), (DA2, BA2), (DA3, BA3), (DA4, BA4)}       !{(DA1, AA1)}
+!{(DA1, CA1), (DA2, CA2), (DA3, CA3), (DA4, CA4)}       !{(DA1, DB1)}
+!{(DA1, DC1), (DA2, DC2), (DA3, DC3), (DA4, DC4)}       !{(DB1, AB1)}
+!{(DA1, DD1), (DA2, DD2), (DA3, DD3), (DA4, DD4)}       !{(DB1, BB1)}
+!{(DC1, AC1), (DC2, AC2), (DC3, AC3), (DC4, AC4)}       !{(DB1, CB1)}
+!{(DC1, BC1), (DC2, BC2), (DC3, BC3), (DC4, BC4)}       !{(DB1, DA1)}
+!{(DC1, DA1), (DC2, DA2), (DC3, DA3), (DC4, DA4)}       !{(DB1, DC1)}
+!{(DC1, DD1), (DC2, DD2), (DC3, DD3), (DC4, DD4)}       !{(DB1, DD1)}
+!{(DD1, AD1), (DD2, AD2), (DD3, AD3), (DD4, AD4)}       !{(DC1, CC1)}
+!{(DD1, CD1), (DD2, CD2), (DD3, CD3), (DD4, CD4)}       !{(DC1, DB1)}
+!{(DD1, DA1), (DD2, DA2), (DD3, DA3), (DD4, DA4)}       !{(DD1, BD1)}
+!{(DD1, DC1), (DD2, DC2), (DD3, DC3), (DD4, DC4)}       !{(DD1, DB1)}
+!{(AB1, BA1), (AB2, BA2), (AB3, BA3), (AB4, BA4)}       !{(AA1, BB1)}
+!{(BA1, AB1), (BA2, AB2), (BA3, AB3), (BA4, AB4)}       !{(BB1, AA1)}
+!{(CB1, DA1), (CB2, DA2), (CB3, DA3), (CB4, DA4)}       !{(CC1, DD1)}
+!{(DA1, CB1), (DA2, CB2), (DA3, CB3), (DA4, CB4)}       !{(DD1, CC1)}
+!{(BC1, AD1), (BC2, AD2), (BC3, AD3), (BC4, AD4)}       !{(BD1, AC1)}
+!{(AD1, BC1), (AD2, BC2), (AD3, BC3), (AD4, BC4)}       !{(AC1, BD1)}
+!{(DC1, CD1), (DC2, CD2), (DC3, CD3), (DC4, CD4)}       !{(DB1, CA1)}
+!{(CD1, DC1), (CD2, DC2), (CD3, DC3), (CD4, DC4)}       !{(CA1, DB1)}

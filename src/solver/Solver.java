@@ -57,7 +57,7 @@ public class Solver {
 
     public String explain(List<Value> solution) {
         if (solution == null || solution.size() != sets.size())
-            return "Not a solution.";
+            return "Not a next.";
 
         StringBuilder message = new StringBuilder();
 
@@ -65,7 +65,7 @@ public class Solver {
             Value lValue = solution.get(i);
 
             if (!sets.get(i).contains(lValue))
-                return "Not a solution.";
+                return "Not a next.";
 
             message.append(lValue.getDomainName()).append(" = ")
                     .append(lValue).append(" explanation:\n");
@@ -78,7 +78,7 @@ public class Solver {
                 Value rValue = solution.get(j);
 
                 if (!relation.getRelatedValues(lValue).contains(rValue))
-                    return "Not a solution.";
+                    return "Not a next.";
 
                 if (relation instanceof EqConstraint)
                     message.append(" - { (").append(lValue).append(", ")
@@ -108,16 +108,79 @@ public class Solver {
 
     public Enumeration<List<Value>> enumeration() {
         return new Enumeration<List<Value>>() {
-            private Iterator<List<Value>> iterator =
-                    streamBacktrack(new LinkedList<>(), sets.stream()
-                            .map(DSLSet::getValues).collect(Collectors
-                                    .toCollection(LinkedList::new))).iterator();
+            private LinkedList<LinkedList<Set<Value>>> stack = new LinkedList<>();
+            private LinkedList<Iterator<Value>> iterators = new LinkedList<>();
+            private LinkedList<Value> next = new LinkedList<>();
+
+            {
+                stack.add(sets.stream().map(DSLSet::getValues)
+                        .collect(Collectors.toCollection(LinkedList::new)));
+                iterators.add(stack.getLast().getFirst().iterator());
+                backtrack();
+            }
+
+            private void pop() {
+                iterators.removeLast();
+                stack.removeLast();
+                next.pollLast();
+            }
+
+            private void backtrack() {
+                while (!stack.isEmpty() && !iterators.getLast().hasNext())
+                    pop();
+
+                if (stack.isEmpty())
+                    return;
+
+                int step = next.size();
+
+                loop: while (iterators.getLast().hasNext()) {
+                    Value value = iterators.getLast().next();
+                    for (int i = 0; i < step; i++)
+                        if (!sets.get(step).getRelationWith(sets.get(i))
+                                .getRelatedValues(value).contains(next.get(i)))
+                            continue loop;
+
+                    LinkedList<Set<Value>> nextSolutionSets = new LinkedList<>();
+
+                    for (int i = step + 1; i < sets.size() ; i++) {
+                        nextSolutionSets.add(new HashSet<>(stack.getLast().get(i - step)));
+                        nextSolutionSets.getLast().retainAll(sets.get(step)
+                                .getRelationWith(sets.get(i)).getRelatedValues(value));
+
+                        if (nextSolutionSets.getLast().isEmpty())
+                            continue loop;
+                    }
+
+                    next.add(value);
+
+                    if (nextSolutionSets.isEmpty())
+                        return;
+
+                    stack.add(nextSolutionSets);
+                    iterators.add(nextSolutionSets.getFirst().iterator());
+                    backtrack();
+
+                    if (!next.isEmpty())
+                        return;
+
+                    pop();
+                }
+
+                backtrack();
+            }
 
             @Override
-            public boolean hasMoreElements() { return iterator.hasNext(); }
+            public boolean hasMoreElements() { return next != null; }
 
             @Override
-            public List<Value> nextElement() { return iterator.next(); }
+            public List<Value> nextElement() {
+                List<Value> solution = new LinkedList<>(next);
+                next.removeLast();
+                backtrack();
+
+                return solution;
+            }
         };
     }
 
@@ -166,7 +229,7 @@ public class Solver {
             List<Value> solution = solver.backtrackingSearch();
 
             if (solution == null)
-                System.out.println("No solution found.");
+                System.out.println("No next found.");
             else
                 System.out.println(solver.explain(solution));
         } catch (CompilerException e) {
