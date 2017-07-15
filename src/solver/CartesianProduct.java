@@ -10,4 +10,7 @@ public class CartesianProduct extends Relation {
     public HashSet<Value> getRelatedValues(Value value) {
         return range.getValues();
     }
+
+    @Override
+    public String explain(Value lValue, Value rValue) { return ""; }
 }

@@ -24,4 +24,5 @@ public abstract class Relation {
     public DSLSet getDomain() { return domain; }
     public DSLSet getRange() { return range; }
     public abstract HashSet<Value> getRelatedValues(Value value);
+    public abstract String explain(Value lValue, Value rValue);
 }

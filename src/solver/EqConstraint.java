@@ -11,4 +11,9 @@ public class EqConstraint extends Relation {
 
         return afterSet.size() > 1? new HashSet<>() : afterSet;
     }
+
+    @Override
+    public String explain(Value lValue, Value rValue) {
+        return rValue.getDomainName() + " = " + rValue;
+    }
 }
