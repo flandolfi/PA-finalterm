@@ -1,14 +1,14 @@
-package solver;
+package dsl;
 
 import java.util.HashMap;
 import java.util.HashSet;
 
 public abstract class Relation {
     protected final HashMap<Value, HashSet<Value>> afterSets = new HashMap<>();
-    protected final DSLSet domain;
-    protected final DSLSet range;
+    protected final Domain domain;
+    protected final Domain range;
 
-    public Relation(DSLSet domain, DSLSet range) {
+    public Relation(Domain domain, Domain range) {
         this.domain = domain;
         this.range = range;
     }
@@ -21,8 +21,8 @@ public abstract class Relation {
         return afterSets.getOrDefault(value, new HashSet<>());
     }
 
-    public DSLSet getDomain() { return domain; }
-    public DSLSet getRange() { return range; }
+    public Domain getDomain() { return domain; }
+    public Domain getRange() { return range; }
     public abstract HashSet<Value> getAdjacencySet(Value value);
     public abstract String explain(Value lValue, Value rValue);
 }

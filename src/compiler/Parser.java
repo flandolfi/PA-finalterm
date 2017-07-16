@@ -1,17 +1,17 @@
 package compiler;
 
+import dsl.*;
 import javafx.util.Pair;
 import java.io.Reader;
+import java.util.Collection;
 import java.util.HashMap;
-
-import solver.*;
 
 public class Parser {
     private Scanner scanner;
-    private HashMap<String, DSLSet> sets;
+    private HashMap<String, Domain> sets;
     private Type token;
 
-    public Solver parse(Reader reader) throws CompilerException {
+    public Collection<Domain> parse(Reader reader) throws CompilerException {
         scanner = new Scanner(reader);
         sets = new HashMap<>();
 
@@ -26,12 +26,12 @@ public class Parser {
                     + type + "; Found: " + token + ".");
     }
 
-    private Solver parseSolver() throws CompilerException {
+    private Collection<Domain> parseSolver() throws CompilerException {
         parseDList();
         parseRList();
         expect(Type.EOF);
 
-        return new Solver(sets.values());
+        return sets.values();
     }
 
     private Value parseValue() throws CompilerException {
@@ -48,7 +48,7 @@ public class Parser {
         return new Value(tokens[0], tokens[1]);
     }
 
-    private void parseVList(DSLSet set) throws CompilerException {
+    private void parseVList(Domain set) throws CompilerException {
         Value value = parseValue();
 
         if (!value.getDomainName().equals(set.toString()))
@@ -67,7 +67,7 @@ public class Parser {
 
     private void parseDList() throws CompilerException {
         expect(Type.WORD);
-        DSLSet set = new DSLSet(scanner.getTokenValue());
+        Domain set = new Domain(scanner.getTokenValue());
 
         if (!set.toString().matches("[A-Za-z]+"))
             throw new CompilerException(scanner.printLineNo()
@@ -94,8 +94,8 @@ public class Parser {
             case O_BR:
                 expect(Type.O_BR);
                 Pair<Value, Value> pair = parsePair();
-                DSLSet domain = sets.get(pair.getKey().getDomainName());
-                DSLSet range = sets.get(pair.getValue().getDomainName());
+                Domain domain = sets.get(pair.getKey().getDomainName());
+                Domain range = sets.get(pair.getValue().getDomainName());
                 Relation relation = token == Type.O_BR? new EqConstraint(domain, range)
                         : new DiffConstraint(domain, range);
                 relation.addPair(pair.getKey(), pair.getValue());

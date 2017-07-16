@@ -1,4 +1,4 @@
-package solver;
+package dsl;
 
 public class Value {
     private final String label;

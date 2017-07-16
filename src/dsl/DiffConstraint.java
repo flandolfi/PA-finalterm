@@ -1,9 +1,9 @@
-package solver;
+package dsl;
 
 import java.util.HashSet;
 
 public class DiffConstraint extends Relation {
-    public DiffConstraint(DSLSet domain, DSLSet range) { super(domain, range); }
+    public DiffConstraint(Domain domain, Domain range) { super(domain, range); }
 
     @Override
     public HashSet<Value> getAdjacencySet(Value value) {

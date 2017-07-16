@@ -1,36 +1,32 @@
 package solver;
 
+import dsl.Domain;
+import dsl.Value;
 import compiler.*;
 
 import java.io.*;
 import java.util.*;
 import java.util.stream.Collectors;
 
-public class Solver implements Enumeration<List<Value>> {
-    private LinkedList<LinkedList<Set<Value>>> stack = new LinkedList<>();
-    private LinkedList<Iterator<Value>> iterators = new LinkedList<>();
-    private LinkedList<Value> solution = new LinkedList<>(),
-            next = new LinkedList<>();
-    private ArrayList<DSLSet> sets;
+public class Solver {
+    protected LinkedList<Value> solution = new LinkedList<>();
+    protected LinkedList<Set<Value>> universe;
+    protected ArrayList<Domain> sets;
 
-    public Solver(Collection<DSLSet> sets) {
+    public Solver(Collection<Domain> sets) {
         this.sets = new ArrayList<>(sets);
-        stack.add(sets.stream().map(DSLSet::getValues)
-                .collect(Collectors.toCollection(LinkedList::new)));
-        iterators.add(stack.getLast().getFirst().iterator());
-        searchNext();
+        universe = sets.stream().map(Domain::getValues)
+                .collect(Collectors.toCollection(LinkedList::new));
     }
 
     public List<Value> backtrackingSearch() {
-        solution = backtrack(new LinkedList<>(),
-                sets.stream().map(DSLSet::getValues)
-                .collect(Collectors.toCollection(LinkedList::new)));
+        solution = backtrack(new LinkedList<>(), universe);
 
         return solution;
     }
 
-    private LinkedList<Value> backtrack(LinkedList<Value> solution,
-                                  LinkedList<Set<Value>> prevInferences) {
+    protected LinkedList<Value> backtrack(LinkedList<Value> solution,
+                                        LinkedList<Set<Value>> prevInferences) {
         for (Value value: prevInferences.getFirst()) {
             LinkedList<Set<Value>> inferences =
                     infer(value, solution, prevInferences);
@@ -48,8 +44,8 @@ public class Solver implements Enumeration<List<Value>> {
         return null;
     }
 
-    private LinkedList<Set<Value>> infer(Value value, LinkedList<Value> solution,
-                                 LinkedList<Set<Value>> inferences) {
+    protected LinkedList<Set<Value>> infer(Value value,
+                LinkedList<Value> solution, LinkedList<Set<Value>> inferences) {
         int step = solution.size();
 
         for (int i = 0; i < step; i++)
@@ -71,31 +67,6 @@ public class Solver implements Enumeration<List<Value>> {
         solution.add(value);
 
         return result;
-    }
-
-    private void searchNext() {
-        while (!stack.isEmpty()) {
-            while (iterators.getLast().hasNext()) {
-                Value value = iterators.getLast().next();
-                LinkedList<Set<Value>> inferences =
-                        infer(value, next, stack.getLast());
-
-                if (inferences == null)
-                    continue;
-
-                if (inferences.isEmpty())
-                    return;
-
-                stack.add(inferences);
-                iterators.add(inferences.getFirst().iterator());
-            }
-
-            while (!stack.isEmpty() && !iterators.getLast().hasNext()) {
-                iterators.removeLast();
-                stack.removeLast();
-                next.pollLast();
-            }
-        }
     }
 
     public String explain() {
@@ -125,18 +96,6 @@ public class Solver implements Enumeration<List<Value>> {
         return builder.toString();
     }
 
-    @Override
-    public boolean hasMoreElements() { return !next.isEmpty(); }
-
-    @Override
-    public List<Value> nextElement() {
-        solution = new LinkedList<>(next);
-        next.pollLast();
-        searchNext();
-
-        return solution;
-    }
-
     public static void main(String[] args) {
         if (args.length == 0) {
             System.err.println("Path not found");
@@ -145,15 +104,14 @@ public class Solver implements Enumeration<List<Value>> {
 
         try {
             Parser parser = new Parser();
-            Solver solver = parser.parse(new BufferedReader(new FileReader(args[0])));
+            Solver solver = new Solver(parser.parse(
+                    new BufferedReader(new FileReader(args[0]))));
             solver.backtrackingSearch();
             System.out.println(solver.explain());
         } catch (CompilerException e) {
             System.err.println("ERROR: File " + args[0] + " @ " + e.getMessage());
         } catch (FileNotFoundException e) {
             System.err.println("ERROR: File " + args[0] + " not found.");
-        } catch (NoSuchElementException e) {
-            System.err.println("ERROR: No solution found.");
         }
     }
 }
