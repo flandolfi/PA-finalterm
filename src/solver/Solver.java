@@ -18,58 +18,84 @@ public class Solver implements Enumeration<List<Value>> {
         stack.add(sets.stream().map(DSLSet::getValues)
                 .collect(Collectors.toCollection(LinkedList::new)));
         iterators.add(stack.getLast().getFirst().iterator());
-        backtrack();
+        searchNext();
     }
 
-    private void pop() {
-        iterators.removeLast();
-        stack.removeLast();
-        next.pollLast();
+    public List<Value> backtrackingSearch() {
+        solution = backtrack(new LinkedList<>(),
+                sets.stream().map(DSLSet::getValues)
+                .collect(Collectors.toCollection(LinkedList::new)));
+
+        return solution;
     }
 
-    private void backtrack() {
-        while (!stack.isEmpty() && !iterators.getLast().hasNext())
-            pop();
+    private LinkedList<Value> backtrack(LinkedList<Value> solution,
+                                  LinkedList<Set<Value>> solutionSets) {
+        for (Value value: solutionSets.getFirst()) {
+            LinkedList<Set<Value>> nextSolutionSets =
+                    infer(value, solution, solutionSets);
 
-        if (stack.isEmpty())
-            return;
+            if (nextSolutionSets == null)
+                continue;
 
-        int step = next.size();
+            if (nextSolutionSets.isEmpty() ||
+                    backtrack(solution, nextSolutionSets) != null)
+                return solution;
 
-        loop: while (iterators.getLast().hasNext()) {
-            Value value = iterators.getLast().next();
-            for (int i = 0; i < step; i++)
-                if (!sets.get(step).getRelationWith(sets.get(i))
-                        .getAdjacencySet(value).contains(next.get(i)))
-                    continue loop;
-
-            LinkedList<Set<Value>> nextSolutionSets = new LinkedList<>();
-
-            for (int i = step + 1; i < sets.size() ; i++) {
-                nextSolutionSets.add(new HashSet<>(stack.getLast().get(i - step)));
-                nextSolutionSets.getLast().retainAll(sets.get(step)
-                        .getRelationWith(sets.get(i)).getAdjacencySet(value));
-
-                if (nextSolutionSets.getLast().isEmpty())
-                    continue loop;
-            }
-
-            next.add(value);
-
-            if (nextSolutionSets.isEmpty())
-                return;
-
-            stack.add(nextSolutionSets);
-            iterators.add(nextSolutionSets.getFirst().iterator());
-            backtrack();
-
-            if (!next.isEmpty())
-                return;
-
-            pop();
+            solution.removeLast();
         }
 
-        backtrack();
+        return null;
+    }
+
+    private LinkedList<Set<Value>> infer(Value value, LinkedList<Value> solution,
+                                 LinkedList<Set<Value>> solutionSets) {
+        int step = solution.size();
+
+        for (int i = 0; i < step; i++)
+            if (!sets.get(step).getRelationWith(sets.get(i))
+                    .getAdjacencySet(value).contains(solution.get(i)))
+                return null;
+
+        LinkedList<Set<Value>> nextSolutionSets = new LinkedList<>();
+
+        for (int i = step + 1; i < sets.size(); i++) {
+            nextSolutionSets.add(new HashSet<>(solutionSets.get(i - step)));
+            nextSolutionSets.getLast().retainAll(sets.get(step)
+                    .getRelationWith(sets.get(i)).getAdjacencySet(value));
+
+            if (nextSolutionSets.getLast().isEmpty())
+                return null;
+        }
+
+        solution.add(value);
+
+        return nextSolutionSets;
+    }
+
+    private void searchNext() {
+        while (!stack.isEmpty()) {
+            while (iterators.getLast().hasNext()) {
+                Value value = iterators.getLast().next();
+                LinkedList<Set<Value>> nextSolutionSets =
+                        infer(value, next, stack.getLast());
+
+                if (nextSolutionSets == null)
+                    continue;
+
+                if (nextSolutionSets.isEmpty())
+                    return;
+
+                stack.add(nextSolutionSets);
+                iterators.add(nextSolutionSets.getFirst().iterator());
+            }
+
+            while (!stack.isEmpty() && !iterators.getLast().hasNext()) {
+                iterators.removeLast();
+                stack.removeLast();
+                next.pollLast();
+            }
+        }
     }
 
     public String explain() {
@@ -106,7 +132,7 @@ public class Solver implements Enumeration<List<Value>> {
     public List<Value> nextElement() {
         solution = new LinkedList<>(next);
         next.pollLast();
-        backtrack();
+        searchNext();
 
         return solution;
     }
@@ -120,7 +146,7 @@ public class Solver implements Enumeration<List<Value>> {
         try {
             Parser parser = new Parser();
             Solver solver = parser.parse(new BufferedReader(new FileReader(args[0])));
-            solver.nextElement();
+            solver.backtrackingSearch();
             System.out.println(solver.explain());
         } catch (CompilerException e) {
             System.err.println("ERROR: File " + args[0] + " @ " + e.getMessage());
