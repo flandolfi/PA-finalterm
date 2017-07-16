@@ -30,16 +30,16 @@ public class Solver implements Enumeration<List<Value>> {
     }
 
     private LinkedList<Value> backtrack(LinkedList<Value> solution,
-                                  LinkedList<Set<Value>> solutionSets) {
-        for (Value value: solutionSets.getFirst()) {
-            LinkedList<Set<Value>> nextSolutionSets =
-                    infer(value, solution, solutionSets);
+                                  LinkedList<Set<Value>> prevInferences) {
+        for (Value value: prevInferences.getFirst()) {
+            LinkedList<Set<Value>> inferences =
+                    infer(value, solution, prevInferences);
 
-            if (nextSolutionSets == null)
+            if (inferences == null)
                 continue;
 
-            if (nextSolutionSets.isEmpty() ||
-                    backtrack(solution, nextSolutionSets) != null)
+            if (inferences.isEmpty() ||
+                    backtrack(solution, inferences) != null)
                 return solution;
 
             solution.removeLast();
@@ -49,7 +49,7 @@ public class Solver implements Enumeration<List<Value>> {
     }
 
     private LinkedList<Set<Value>> infer(Value value, LinkedList<Value> solution,
-                                 LinkedList<Set<Value>> solutionSets) {
+                                 LinkedList<Set<Value>> inferences) {
         int step = solution.size();
 
         for (int i = 0; i < step; i++)
@@ -57,37 +57,37 @@ public class Solver implements Enumeration<List<Value>> {
                     .getAdjacencySet(value).contains(solution.get(i)))
                 return null;
 
-        LinkedList<Set<Value>> nextSolutionSets = new LinkedList<>();
+        LinkedList<Set<Value>> result = new LinkedList<>();
 
         for (int i = step + 1; i < sets.size(); i++) {
-            nextSolutionSets.add(new HashSet<>(solutionSets.get(i - step)));
-            nextSolutionSets.getLast().retainAll(sets.get(step)
+            result.add(new HashSet<>(inferences.get(i - step)));
+            result.getLast().retainAll(sets.get(step)
                     .getRelationWith(sets.get(i)).getAdjacencySet(value));
 
-            if (nextSolutionSets.getLast().isEmpty())
+            if (result.getLast().isEmpty())
                 return null;
         }
 
         solution.add(value);
 
-        return nextSolutionSets;
+        return result;
     }
 
     private void searchNext() {
         while (!stack.isEmpty()) {
             while (iterators.getLast().hasNext()) {
                 Value value = iterators.getLast().next();
-                LinkedList<Set<Value>> nextSolutionSets =
+                LinkedList<Set<Value>> inferences =
                         infer(value, next, stack.getLast());
 
-                if (nextSolutionSets == null)
+                if (inferences == null)
                     continue;
 
-                if (nextSolutionSets.isEmpty())
+                if (inferences.isEmpty())
                     return;
 
-                stack.add(nextSolutionSets);
-                iterators.add(nextSolutionSets.getFirst().iterator());
+                stack.add(inferences);
+                iterators.add(inferences.getFirst().iterator());
             }
 
             while (!stack.isEmpty() && !iterators.getLast().hasNext()) {
