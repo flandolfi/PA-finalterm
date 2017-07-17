@@ -11,7 +11,6 @@ import java.util.List;
 
 import static org.junit.jupiter.api.Assertions.*;
 
-
 class SolutionsEnumeratorTest {
     @Test
     void enumeration() {
@@ -40,19 +39,23 @@ class SolutionsEnumeratorTest {
 
             fst = solver.backtrackingSearch();
             assertNotNull(fst);
+            String explanation = solver.explain();
 
             for (int i = 0; i < 18; i++) {
                 assertTrue(solver.hasMoreElements());
                 next.clear();
                 snd.clear();
-                next.addAll(solver.nextElement());
                 snd.addAll(solver.backtrackingSearch());
+                next.addAll(solver.nextElement());
                 assertIterableEquals(fst, snd);
                 solutions.forEach(s -> assertFalse(s.containsAll(next)));
                 solutions.add(new LinkedList<>(next));
             }
 
             assertFalse(solver.hasMoreElements());
+            assertFalse(explanation.equals(solver.explain()));
+            solver.backtrackingSearch();
+            assertTrue(explanation.equals(solver.explain()));
         } catch (Exception e) {
             fail("You shouldn't be here! (op.cit.)");
         }

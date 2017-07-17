@@ -96,6 +96,10 @@ public class Solver {
         return builder.toString();
     }
 
+    public SolutionsEnumerator enumerator() {
+        return new SolutionsEnumerator(sets);
+    }
+
     public static void main(String[] args) {
         if (args.length == 0) {
             System.err.println("Path not found");

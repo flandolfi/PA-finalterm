@@ -1,10 +1,8 @@
-AA = {AA1}          BD = {BD1}          DB = {DB1}          CC = {CC1}
-AB = {AB1, AB2, AB3, AB4}         CA = {CA1, CA2, CA3, CA4}
-AC = {AC1, AC2, AC3, AC4}         CB = {CB1, CB2, CB3, CB4}
-AD = {AD1, AD2, AD3, AD4}         CD = {CD1, CD2, CD3, CD4}
-BA = {BA1, BA2, BA3, BA4}         DA = {DA1, DA2, DA3, DA4}
-BB = {BB1, BB2, BB3, BB4}         DC = {DC1, DC2, DC3, DC4}
-BC = {BC1, BC2, BC3, BC4}         DD = {DD1, DD2, DD3, DD4}
+AA = {AA1}   BD = {BD1}   DB = {DB1}   CC = {CC1}
+AB = {AB1, AB2, AB3, AB4}   CA = {CA1, CA2, CA3, CA4}   AC = {AC1, AC2, AC3, AC4}
+CB = {CB1, CB2, CB3, CB4}   AD = {AD1, AD2, AD3, AD4}   CD = {CD1, CD2, CD3, CD4}
+BA = {BA1, BA2, BA3, BA4}   DA = {DA1, DA2, DA3, DA4}   BB = {BB1, BB2, BB3, BB4}
+DC = {DC1, DC2, DC3, DC4}   BC = {BC1, BC2, BC3, BC4}   DD = {DD1, DD2, DD3, DD4}
 
 !{(AB1, CB1), (AB2, CB2), (AB3, CB3), (AB4, CB4)}       !{(AA1, BA1)}
 !{(AB1, BB1), (AB2, BB2), (AB3, BB3), (AB4, BB4)}       !{(AA1, CA1)}

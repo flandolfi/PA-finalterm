@@ -18,8 +18,6 @@ public class SolutionsEnumerator extends Solver
         searchNext();
     }
 
-    public SolutionsEnumerator(Solver solver) { this(solver.sets); }
-
     private void searchNext() {
         while (!stack.isEmpty()) {
             while (iterators.getLast().hasNext()) {
