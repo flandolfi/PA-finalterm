@@ -65,7 +65,7 @@ public class Solver {
 
         for (int i = 0; i < sets.size(); i++) {
             builder.append(sets.get(i)).append(" = ")
-                    .append(solution.get(i)).append("  \u21D2  "); \\ IMPLIES
+                    .append(solution.get(i)).append("  \u21D2  "); // IMPLIES
 
             for (int j = 0; j < sets.size(); j++) {
                 if (i == j)
@@ -75,7 +75,7 @@ public class Solver {
                         .explain(solution.get(i), solution.get(j));
 
                 if (!pairs.equals(""))
-                    builder.append(pairs).append(" \u2227 "); \\ AND
+                    builder.append(pairs).append(" \u2227 "); // AND
             }
 
             builder.delete(builder.length() - 3, builder.length()).append("\n");
