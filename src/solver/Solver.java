@@ -27,21 +27,11 @@ public class Solver {
 
     protected LinkedList<Value> backtrack(LinkedList<Value> solution,
                                         LinkedList<Set<Value>> prevInferences) {
-        for (Value value: prevInferences.getFirst()) {
-            LinkedList<Set<Value>> inferences =
-                    infer(value, solution, prevInferences);
-
-            if (inferences == null)
-                continue;
-
-            if (inferences.isEmpty() ||
-                    backtrack(solution, inferences) != null)
-                return solution;
-
-            solution.removeLast();
-        }
-
-        return null;
+        return solution.size() == sets.size()? solution : prevInferences.getFirst()
+                .stream().map(v -> infer(v, solution, prevInferences))
+                .filter(Objects::nonNull).map(i -> backtrack(solution, i))
+                .filter(s -> s != null || solution.removeLast() == null)
+                .findFirst().orElse(null);
     }
 
     protected LinkedList<Set<Value>> infer(Value value,
@@ -102,7 +92,7 @@ public class Solver {
 
     public static void main(String[] args) {
         if (args.length == 0) {
-            System.err.println("Path not found");
+            System.err.println("ERROR: Missing argument: path to (.csp) file.");
             System.exit(1);
         }
 
