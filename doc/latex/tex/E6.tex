@@ -1,1 +1,79 @@
 \section{Esercizio 6}
+
+Nel metodo {\tt main()} della classe {\tt Solver} (\autoref{lst:solver}) viene
+eseguita la ricerca in backtracking su un sudoku configurato inizialmente come
+in \autoref{fig:before} (a). Questa configurazione è espressa con il linguaggio
+definito nelle specifiche nel \autoref{lst:sudoku}. La soluzione ottenuta sarà come quella in \autoref{fig:after}.
+
+\begin{figure}[h]
+    \centering
+    \setlength\arrayrulewidth{0.8pt}
+    \setlength\extrarowheight{3pt}
+    \setlength{\aboverulesep}{0pt}
+    \setlength{\belowrulesep}{0pt}
+    \begin{subfigure}{0.3\textwidth}
+        \centering
+        \begin{tabular}{m{0.1cm}|m{0.1cm}!{\vrule width 0.1pt}m{0.1cm}|m{0.1cm}!{\vrule width 0.1pt}m{0.1cm}|m{0.1cm}}
+            \multicolumn{1}{c}{} &
+            \multicolumn{1}{c}{\scshape{a}} &
+            \multicolumn{1}{c}{\scshape{b}} &
+            \multicolumn{1}{c}{\scshape{c}} &
+            \multicolumn{1}{c}{\scshape{d}} & \\
+            \cline{2-5}
+            \scshape{a} & {\bf 1} & & & & \\
+            \cmidrule[0.1pt]{2-5}
+            \scshape{b} & & & & {\bf 1} & \\
+            \cline{2-5}
+            \scshape{c} & & & {\bf 1} & & \\
+            \cmidrule[0.1pt]{2-5}
+            \scshape{d} & & {\bf 1} & & & \\
+            \cline{2-5}
+        \end{tabular}
+        \label{table:before}
+        \caption{} \label{fig:before}
+    \end{subfigure}
+    \begin{subfigure}{0.3\textwidth}
+        \centering
+        \begin{tabular}{m{0.1cm}|m{0.1cm}!{\vrule width 0.1pt}m{0.1cm}|m{0.1cm}!{\vrule width 0.1pt}m{0.1cm}|m{0.1cm}}
+            \multicolumn{1}{c}{} &
+            \multicolumn{1}{c}{\scshape{a}} &
+            \multicolumn{1}{c}{\scshape{b}} &
+            \multicolumn{1}{c}{\scshape{c}} &
+            \multicolumn{1}{c}{\scshape{d}} &\\
+            \cline{2-5}
+            \scshape{a} & {\bf 1} & 3 & 2 & 4 & \\
+            \cmidrule[0.1pt]{2-5}
+            \scshape{b} & 4 & 2 & 3 & {\bf 1} & \\
+            \cline{2-5}
+            \scshape{c} & 3 & 4 & {\bf 1} & 2 &\\
+            \cmidrule[0.1pt]{2-5}
+            \scshape{d} & 2 & {\bf 1} & 4 & 3 & \\
+            \cline{2-5}
+        \end{tabular}
+        \caption{} \label{fig:after}
+    \end{subfigure}
+    \caption{Modello del Sudoku utilizzato: {\bf (a)} stato iniziale; {\bf (b)} risolto con il metodo {\tt backtrackingSearch()}.}
+\end{figure}
+
+\lstinputlisting[caption=Sudoku.csp, label=lst:sudoku, tabsize=4]{../../../test/samples/Sudoku.csp}
+
+Il programma producerà il seguente output:
+
+\begin{lstlisting}[mathescape=true, caption=Output]
+$\text{\tt AA} = \text{\tt AA1}  \:\Rightarrow\:  \text{\tt BB} \neq \text{\tt BB1} \land \text{\tt AB} \neq \text{\tt AB1} \land \text{\tt AC} \neq \text{\tt AC1} \land \text{\tt AD} \neq \text{\tt AD1} \land \text{\tt DA} \neq \text{\tt DA1} \land \text{\tt CA} \neq \text{\tt CA1} \land \text{\tt BA} \neq \text{\tt BA1}$
+$\text{\tt CC} = \text{\tt CC1}  \:\Rightarrow\:  \text{\tt DD} \neq \text{\tt DD1} \land \text{\tt CD} \neq \text{\tt CD1} \land \text{\tt BC} \neq \text{\tt BC1} \land \text{\tt AC} \neq \text{\tt AC1} \land \text{\tt CA} \neq \text{\tt CA1} \land \text{\tt CB} \neq \text{\tt CB1} \land \text{\tt DC} \neq \text{\tt DC1}$
+$\text{\tt BB} = \text{\tt BB2}  \:\Rightarrow\:  \text{\tt AB} \neq \text{\tt AB2} \land \text{\tt BC} \neq \text{\tt BC2} \land \text{\tt CB} \neq \text{\tt CB2} \land \text{\tt BA} \neq \text{\tt BA2}$
+$\text{\tt DD} = \text{\tt DD3}  \:\Rightarrow\:  \text{\tt CD} \neq \text{\tt CD3} \land \text{\tt AD} \neq \text{\tt AD3} \land \text{\tt DA} \neq \text{\tt DA3} \land \text{\tt DC} \neq \text{\tt DC3}$
+$\text{\tt AB} = \text{\tt AB3}  \:\Rightarrow\:  \text{\tt BB} \neq \text{\tt BB3} \land \text{\tt AC} \neq \text{\tt AC3} \land \text{\tt AD} \neq \text{\tt AD3} \land \text{\tt CB} \neq \text{\tt CB3} \land \text{\tt BA} \neq \text{\tt BA3}$
+$\text{\tt CD} = \text{\tt CD2}  \:\Rightarrow\:  \text{\tt DD} \neq \text{\tt DD2} \land \text{\tt AD} \neq \text{\tt AD2} \land \text{\tt CA} \neq \text{\tt CA2} \land \text{\tt CB} \neq \text{\tt CB2} \land \text{\tt DC} \neq \text{\tt DC2}$
+$\text{\tt BC} = \text{\tt BC3}  \:\Rightarrow\:  \text{\tt BB} \neq \text{\tt BB3} \land \text{\tt AC} \neq \text{\tt AC3} \land \text{\tt AD} \neq \text{\tt AD3} \land \text{\tt BA} \neq \text{\tt BA3} \land \text{\tt DC} \neq \text{\tt DC3}$
+$\text{\tt BD} = \text{\tt BD1}  \:\Rightarrow\:  \text{\tt BB} \neq \text{\tt BB1} \land \text{\tt DD} \neq \text{\tt DD1} \land \text{\tt CD} \neq \text{\tt CD1} \land \text{\tt BC} \neq \text{\tt BC1} \land \text{\tt AC} \neq \text{\tt AC1} \land \text{\tt AD} \neq \text{\tt AD1} \land \text{\tt BA} \neq \text{\tt BA1}$
+$\text{\tt AC} = \text{\tt AC2}  \:\Rightarrow\:  \text{\tt AB} \neq \text{\tt AB2} \land \text{\tt BC} \neq \text{\tt BC2} \land \text{\tt AD} \neq \text{\tt AD2} \land \text{\tt DC} \neq \text{\tt DC2}$
+$\text{\tt AD} = \text{\tt AD4}  \:\Rightarrow\:  \text{\tt DD} \neq \text{\tt DD4} \land \text{\tt AB} \neq \text{\tt AB4} \land \text{\tt CD} \neq \text{\tt CD4} \land \text{\tt BC} \neq \text{\tt BC4} \land \text{\tt AC} \neq \text{\tt AC4}$
+$\text{\tt DA} = \text{\tt DA2}  \:\Rightarrow\:  \text{\tt DD} \neq \text{\tt DD2} \land \text{\tt CA} \neq \text{\tt CA2} \land \text{\tt CB} \neq \text{\tt CB2} \land \text{\tt BA} \neq \text{\tt BA2} \land \text{\tt DC} \neq \text{\tt DC2}$
+$\text{\tt DB} = \text{\tt DB1}  \:\Rightarrow\:  \text{\tt BB} \neq \text{\tt BB1} \land \text{\tt DD} \neq \text{\tt DD1} \land \text{\tt AB} \neq \text{\tt AB1} \land \text{\tt DA} \neq \text{\tt DA1} \land \text{\tt CA} \neq \text{\tt CA1} \land \text{\tt CB} \neq \text{\tt CB1} \land \text{\tt DC} \neq \text{\tt DC1}$
+$\text{\tt CA} = \text{\tt CA3}  \:\Rightarrow\:  \text{\tt CD} \neq \text{\tt CD3} \land \text{\tt DA} \neq \text{\tt DA3} \land \text{\tt CB} \neq \text{\tt CB3} \land \text{\tt BA} \neq \text{\tt BA3}$
+$\text{\tt CB} = \text{\tt CB4}  \:\Rightarrow\:  \text{\tt BB} \neq \text{\tt BB4} \land \text{\tt AB} \neq \text{\tt AB4} \land \text{\tt CD} \neq \text{\tt CD4} \land \text{\tt DA} \neq \text{\tt DA4} \land \text{\tt CA} \neq \text{\tt CA4}$
+$\text{\tt BA} = \text{\tt BA4}  \:\Rightarrow\:  \text{\tt BB} \neq \text{\tt BB4} \land \text{\tt AB} \neq \text{\tt AB4} \land \text{\tt BC} \neq \text{\tt BC4} \land \text{\tt DA} \neq \text{\tt DA4} \land \text{\tt CA} \neq \text{\tt CA4}$
+$\text{\tt DC} = \text{\tt DC4}  \:\Rightarrow\:  \text{\tt DD} \neq \text{\tt DD4} \land \text{\tt CD} \neq \text{\tt CD4} \land \text{\tt BC} \neq \text{\tt BC4} \land \text{\tt AC} \neq \text{\tt AC4} \land \text{\tt DA} \neq \text{\tt DA4}$
+\end{lstlisting}

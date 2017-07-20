@@ -1,8 +1,6 @@
 package solver;
 
-import dsl.Domain;
-import dsl.Value;
-
+import dsl.*;
 import java.util.*;
 
 public class SolutionsEnumerator extends Solver

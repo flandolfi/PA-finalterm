@@ -16,8 +16,8 @@ public class DiffConstraint extends Relation {
     @Override
     public String explain(Value lValue, Value rValue) {
         StringBuilder builder = new StringBuilder();
-        getAfterSet(lValue).forEach(v -> builder.append(" \u2227 ")
-                .append(v.getDomainName()).append(" \u2260 ").append(v));
+        getAfterSet(lValue).forEach(v -> builder.append(" \u2227 ") \\ AND
+                .append(v.getDomainName()).append(" \u2260 ").append(v)); \\ NEQ
         builder.delete(0, 3);
 
         return builder.toString();

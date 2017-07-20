@@ -1,1 +1,29 @@
 \section{Esercizio 2}
+
+Il package {\tt compiler} (\autoref{lst:type}, \ref{lst:scanner}, \ref{lst:parser} e \ref{lst:cex}) implementa l'analizzatore lessicale ({\tt Scanner}) e sintattico ({\tt Parser}). Sono state prese le seguenti scelte progettuali: %
+%
+\begin{enumerate*}
+
+    \item i domini devono avere un nome letterale (ad es. {\tt x}, {\tt y}, ...);
+
+    \item i valori devono cominciare col nome del dominio a cui appartengono,
+    seguito da un numero (ad es. {\tt x1}, {\tt x2}, ...);
+
+    \item le relazioni devono avere un solo dominio e un solo codominio;
+
+    \item le relazioni su uno stesso valore sono trattate in congiunzione logica
+    (ad es. {\tt !\{(x1, y1), (x1, y2)\}} $\equiv x = x1 \Rightarrow y \neq y1
+    \land y \neq y2$);
+
+    \item non si possono definire più relazioni sugli stessi due insiemi:
+    essendo il vincolo di equivalenza più restrittivo di quello di
+    disuguaglianza, quest'ultimo può risultare superfluo o, peggio, creare un
+    vincolo insoddisfacibile. Se invece si definiscono due relazioni dello
+    stesso tipo, queste possono essere scritte come un'unica relazione.
+
+\end{enumerate*}
+
+\lstinputlisting[caption=Type.java, label=lst:type]{../../../src/compiler/Type.java}
+\lstinputlisting[caption=Scanner.java, label=lst:scanner]{../../../src/compiler/Scanner.java}
+\lstinputlisting[caption=Parser.java, label=lst:parser]{../../../src/compiler/Parser.java}
+\lstinputlisting[caption=CompilerException.java, label=lst:cex]{../../../src/compiler/CompilerException.java}

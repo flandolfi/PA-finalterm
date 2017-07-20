@@ -1,7 +1,6 @@
 package dsl;
 
-import java.util.HashMap;
-import java.util.HashSet;
+import java.util.*;
 
 public class Domain {
     private final HashSet<Value> values = new HashSet<>();

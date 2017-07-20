@@ -1,1 +1,37 @@
 \section{Esercizio 1}
+
+Sono state definite le classi: %
+%
+\begin{enumerate*}
+
+    \item \texttt{Value} (\autoref{lst:val}), i cui oggetti rappresentano i
+    possibili valori di un dominio. Sono stati ridefiniti i metodi {\tt
+    equals()} e {\tt hashcode()} per poter utilizzare correttamente oggetti {\tt
+    Value} in un {\tt HashSet} o come chiave di una {\tt HashMap};
+
+    \item \texttt{Domain} (\autoref{lst:set}), che rappresenta i dominî delle
+    variabili, i cui possibili valori ({\tt Value}) sono contenuti in un {\tt
+    HashSet}. È possibile definire una relazione ({\tt Relation}) con un altro
+    dominio tramite il metodo {\tt addRelation()}. La relazione di default con
+    ogni altro dominio è il prodotto cartesiano ({\tt CartesianProduct});
+
+    \item La classe astratta {\tt Relation} (\autoref{lst:rel}) e le sue
+    implementazioni {\tt EqConstraint}, {\tt DiffConstraint} e {\tt
+    CartesianProduct} (\autoref{lst:eq}, \ref{lst:diff} e \ref{lst:cp}), che
+    rappresentano le relazioni (o i vincoli) tra un dominio ed un altro. Le
+    coppie dei valori vengono memorizzate per \emph{afterset}\footnote{Data una
+    relazione $R$, si definisce \emph{afterset} (o \emph{successor
+    neighborhood}) di $x$ in $R$ l'insieme $xR = \{\ y\ |\ xRy\ \}$.}: una {\tt
+    HashMap} mappa ogni valore del dominio della relazione al suo afterset (un
+    {\tt HashSet}). Tramite gli afterset vengono poi calcolati, in base
+    all'implementazione della classe concreta, i possibili valori che soddisfano
+    la relazione (con il metodo astratto {\tt getAdjacencySet()}).
+
+\end{enumerate*}
+
+\lstinputlisting[caption=Value.java, label=lst:val]{../../../src/dsl/Value.java}
+\lstinputlisting[caption=Domain.java, label=lst:set]{../../../src/dsl/Domain.java}
+\lstinputlisting[caption=Relation.java, label=lst:rel]{../../../src/dsl/Relation.java}
+\lstinputlisting[caption=EqConstraint.java, label=lst:eq]{../../../src/dsl/EqConstraint.java}
+\lstinputlisting[caption=DiffConstraint.java, label=lst:diff]{../../../src/dsl/DiffConstraint.java}
+\lstinputlisting[caption=CartesianProduct.java, label=lst:cp]{../../../src/dsl/CartesianProduct.java}

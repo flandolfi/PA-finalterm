@@ -1,7 +1,6 @@
 package dsl;
 
-import java.util.HashMap;
-import java.util.HashSet;
+import java.util.*;
 
 public abstract class Relation {
     protected final HashMap<Value, HashSet<Value>> afterSets = new HashMap<>();

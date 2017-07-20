@@ -3,8 +3,7 @@ package compiler;
 import dsl.*;
 import javafx.util.Pair;
 import java.io.Reader;
-import java.util.Collection;
-import java.util.HashMap;
+import java.util.*;
 
 public class Parser {
     private Scanner scanner;

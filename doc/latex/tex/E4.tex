@@ -1,1 +1,13 @@
 \section{Esercizio 4}
+
+La classe {\tt SolutionsEnumerator} (\autoref{lst:enum}) estende la precedente
+classe ed implementa l'interfaccia {\tt Enumeration}. Il metodo {\tt
+searchNext()} utilizza lo stesso principio della ricerca in backtracking ma in
+modo iterativo: una volta effettuata la propagazione dei vincoli con il metodo
+{\tt infer()}, ereditato da {\tt Solver}, i nuovi dominî (e rispettivi
+iteratori) vengono memorizzati in una pila e il metodo {\tt searchNext()} lavora
+unicamente sugli ultimi domini inseriti. Una volta trovata una soluzione, se il
+metodo viene successivamente richiamato, questo riprende la ricerca dall'ultimo
+elemento elaborato senza dover eseguire nuovamente la propagazione dei vincoli.
+
+\lstinputlisting[caption=SolutionsEnumerator.java, label=lst:enum]{../../../src/solver/SolutionsEnumerator.java}
