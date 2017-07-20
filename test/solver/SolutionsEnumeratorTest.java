@@ -28,6 +28,24 @@ class SolutionsEnumeratorTest {
     }
 
     @Test
+    void enumerateAll() {
+        try {
+            Parser parser = new Parser();
+            SolutionsEnumerator solver = new SolutionsEnumerator(
+                    parser.parse(new BufferedReader(
+                            new FileReader("./test/samples/Empty.csp"))));
+            int i;
+
+            for (i = 0; solver.hasMoreElements(); i++)
+                solver.nextElement();
+
+            System.out.println("Solutions found: " + i);
+        } catch (Exception e) {
+            fail("You shouldn't be here! (op.cit.)");
+        }
+    }
+
+    @Test
     void backtrackingSearch() {
         try {
             Parser parser = new Parser();
