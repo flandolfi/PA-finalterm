@@ -29,7 +29,7 @@
 \usepackage{tabu}
 % \usepackage{lmodern}
 \usepackage[inline]{enumitem}
-% \usepackage[compact, small]{titlesec}
+\usepackage[compact, small]{titlesec}
 
 \definecolor{lightestgray}{gray}{0.97}
 
@@ -59,6 +59,8 @@
 
 \DeclareGraphicsExtensions{.png, .pdf}
 \graphicspath{{img/}{../img/}}
+\author{Francesco Landolfi}
+\title{Final Term di Programmazione Avanzata}
 
 \newcommand{\makefrontispiece}{
     \AddToShipoutPicture*{\AtPageCenter{\makebox(0, 0){%
@@ -93,8 +95,29 @@
     \end{titlepage}
 }
 
+\let\othelstnumber=\thelstnumber
+\def\createlinenumber#1#2{
+  \edef\thelstnumber{%
+    \unexpanded{%
+      \ifnum#1=\value{lstnumber}\relax
+        #2%
+      \else}%
+    \expandafter\unexpanded\expandafter{\thelstnumber\othelstnumber\fi}%
+  }
+  \ifx\othelstnumber=\relax\else
+    \let\othelstnumber\relax
+  \fi
+}
+
+\newcommand\smallvdots{%
+  \vbox{%
+    \baselineskip3pt\lineskiplimit0pt\kern1pt\hbox{.}\hbox{.}\hbox{.}\kern-1pt
+  }
+}
+
 \begin{document}
-\makefrontispiece
+% \makefrontispiece
+\maketitle
 \input{tex/E1.tex}
 \input{tex/E2.tex}
 \input{tex/E3.tex}
@@ -102,5 +125,4 @@
 \input{tex/E5.tex}
 \input{tex/E6.tex}
 \input{tex/E7.tex}
-% \input{tex/Codice.tex}
 \end{document}

@@ -1,7 +1,76 @@
-\section{Esercizio 5}
+\section*{Esercizio 5}
 
-Il metodo {\tt explain()} della classe {\tt Solver} (\autoref{lst:solver})
-restituisce una spiegazione dell'ultima soluzione restituita. Questa è
-essenzialmente una concatenazione del risultato fornito dal metodo {\tt
-explain()} della classe {\tt Relation} e derivate (\autoref{lst:rel},
-\ref{lst:eq}, \ref{lst:diff} e \ref{lst:cp}).
+Vengono estese le classi {\tt Relation} e derivate con il metodo ({\tt
+protected}) {\tt explain()} (\autoref{lst:rel_c}, \ref{lst:eq_c} e
+\ref{lst:diff_c}). Questi metodi, data una coppia di valori appartenente alla
+relazione, restituiscono una stringa contenente le restrizioni sul codominio.
+Nel caso di {\tt EqConstraint} l'unico vincolo rilevante non può che essere
+quello passato per argomento, mentre per {\tt DiffConstraint} viene effettuata
+una concatenazione dei vari vincoli memorizzati nell'afterset. Se la relazione è
+invece {\tt Relation}, significa che non è stato espresso alcun vincolo e quindi
+non viene fornita alcuna motivazione. Viene dunque estesa anche la classe {\tt
+Solver} con il metodo {\tt explain()} (\autoref{lst:solver_c}), questa volta
+pubblico, che restituisce una motivazione ({\tt String}) all'ultima soluzione
+fornita (sia da {\tt backtrackingSearch()} che da {\tt searchNext()}, nel caso
+di {\tt SolutionsEnumerator}). Questo metodo non fa altro che concatenare
+elegantemente le motivazioni fornite dai metodi {\tt explain()} dei vari oggetti
+{\tt Relation}. Un esempio di stringa restituita da questo metodo verrà fornita
+nel prossimo esercizio\footnote{Essendo le motivazioni fornite solamente a
+soluzioni generate dalle classi {\tt Solver} e {\tt SolutionsEnumerator}, non
+occorre effettuare controlli sulle coppie di valori passate come argomento ai
+metodi {\tt explain()} delle classi {\tt Relation} e derivate, poiché saranno
+sicuramente presenti nei loro afterset. Questo è inoltre possibile poiché la
+visibilità di questi metodi è {\tt protected}, quindi ristretta al package e
+alle sottoclassi.}.
+%
+\begin{lstlisting}[caption=Relation.java (cont.), label=lst:rel_c, firstnumber=30]
+    protected String explain(Value lValue, Value rValue) { return ""; }
+\end{lstlisting}
+%
+\begin{lstlisting}[caption=EqConstraint.java (cont.), label=lst:eq_c, firstnumber=15]
+    @Override
+    protected String explain(Value lValue, Value rValue) {
+        return rValue.getDomainName() + " = " + rValue;
+    }
+\end{lstlisting}
+%
+\begin{lstlisting}[caption=DiffConstraint.java (cont.), label=lst:diff_c, firstnumber=16]
+    @Override
+    protected String explain(Value lValue, Value rValue) {
+        StringBuilder builder = new StringBuilder();
+        getAfterSet(lValue).forEach(v -> builder.append(" \u2227 ") // AND
+                .append(v.getDomainName()).append(" \u2260 ").append(v)); // NEQ
+        builder.delete(0, 3);
+
+        return builder.toString();
+    }
+\end{lstlisting}
+%
+\begin{lstlisting}[caption=Solver.java (cont.), label=lst:solver_c, firstnumber=59]
+    public String explain() {
+        if (solution.isEmpty())
+            return "Solution not found.";
+
+        StringBuilder builder = new StringBuilder();
+
+        for (int i = 0; i < sets.size(); i++) {
+            builder.append(sets.get(i)).append(" = ")
+                    .append(solution.get(i)).append("  \u21D2  "); // IMPLIES
+
+            for (int j = 0; j < sets.size(); j++) {
+                if (i == j)
+                    continue;
+
+                String pairs = sets.get(i).getRelationWith(sets.get(j))
+                        .explain(solution.get(i), solution.get(j));
+
+                if (!pairs.equals(""))
+                    builder.append(pairs).append(" \u2227 "); // AND
+            }
+
+            builder.delete(builder.length() - 3, builder.length()).append("\n");
+        }
+
+        return builder.toString();
+    }
+\end{lstlisting}

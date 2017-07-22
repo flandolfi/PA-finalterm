@@ -1,1 +1,37 @@
-\section{Esercizio 7}
+\section*{Esercizio 7}
+
+La \emph{reflection} è la capacità di un programma di esaminare i suoi stessi
+metadati e, nel caso dei linguaggi di programmazione a oggeti, di: %
+%
+\begin{enumerate*}
+    \item ispezionare metodi e attributi di classi ed interfacce;
+    \item accedere e modificare attributi di oggetti e classi;
+    \item invocare metodi di oggetti e classi.
+\end{enumerate*}
+%
+Questo è possibile fintanto che viene mantenuta una tabella dei simboli
+(\emph{symbol table}), ovvero una struttura dati che mappa ogni identificatore
+alle sue relative informazioni conosciute. Alcuni dei principali linguaggi
+dotati di reflection sono: Java, C\# (e gli altri linguaggi .NET), Perl, PHP,
+Tcl, Python, Ruby e JavaScript. La reflection viene usata principalmente per
+creare programmi che manipolano altri programmi, la quale struttura può non
+essere conosciuta a priori. Può essere utile, ad esempio, per effettuare test su
+codice. Spesso, invece, risulta più conveniente l'utilizzo di polimorfismo. Ad
+esempio, nel metodo {\tt explain()} della classe {\tt Solver}
+(\autoref{lst:solver_c}) avrei potuto generare la stringa in base al tipo di
+vincolo trovato (ad es. \texttt{if(R \textbf{instaceof} EqConstraint) \{} ...
+{\tt \}}). Nonostate questo tipo di programmazione sia comune nei linguaggi di
+scripting, nei linguaggi di programmazione ad oggetti è più appropriato (e più
+efficiente) utilizzare il polimorfismo ed eseguire un metodo comune alle
+sottoclassi
+%
+\footnote{Riferimenti:%
+\begin{itemize}[noitemsep,topsep=0pt]
+    \item[--] M. L. Scott. \emph{Programming Language Pragmatics (Third
+    Edition)}. 2009.
+    \item[--] C. Szyperski, D. Gruntz, S. Murer. \emph{Component Software --
+    Beyond Object Oriented Programming (Second Edition)}. 2002.
+    \item[--] Oracle.
+    \href{http://docs.oracle.com/javase/tutorial/reflect/index.html}{
+    \emph{Java\texttrademark{} Documentation. Trail: The Reflection API}}. 2015.
+\end{itemize}}.

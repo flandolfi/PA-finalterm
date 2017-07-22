@@ -1,4 +1,4 @@
-\section{Esercizio 3}
+\section*{Esercizio 3}
 
 La classe {\tt Solver} (\autoref{lst:solver}) implementa una ricerca in
 backtracking\footnote{Riferimenti: S. Russel, P. Norvig. \emph{Artificial
@@ -6,4 +6,69 @@ Intelligence: A Modern Approach (Third Edition)}. 2010.} (ricorsiva). Ad ogni
 assegnazione di valore viene effettuata una propagazione dei vincoli tramite il
 metodo {\tt infer()}.
 
-\lstinputlisting[caption=Solver.java, label=lst:solver]{../../../src/solver/Solver.java}
+% \lstinputlisting[caption=Solver.java, label=lst:solver]{../../../src/solver/Solver.java}
+\bgroup
+\createlinenumber{58}{\smallvdots}
+\createlinenumber{59}{103}
+\begin{lstlisting}[caption=Solver.java, label=lst:solver]
+package dsl;
+
+import compiler.*;
+import java.io.*;
+import java.util.*;
+import java.util.stream.Collectors;
+
+public class Solver {
+    protected LinkedList<Value> solution = new LinkedList<>();
+    protected LinkedList<Set<Value>> universe;
+    protected ArrayList<Domain> sets;
+
+    public Solver(Collection<Domain> sets) {
+        this.sets = new ArrayList<>(sets);
+        universe = sets.stream().map(Domain::getValues)
+                .collect(Collectors.toCollection(LinkedList::new));
+    }
+
+    public List<Value> backtrackingSearch() {
+        solution = backtrack(new LinkedList<>(), universe);
+
+        return solution;
+    }
+
+    protected LinkedList<Value> backtrack(LinkedList<Value> solution,
+                                        LinkedList<Set<Value>> prevInferences) {
+        return solution.size() == sets.size()? solution : prevInferences.getFirst()
+                .stream().map(v -> infer(v, solution, prevInferences))
+                .filter(Objects::nonNull).map(i -> backtrack(solution, i))
+                .filter(s -> s != null || solution.removeLast() == null)
+                .findFirst().orElse(null);
+    }
+
+    protected LinkedList<Set<Value>> infer(Value value,
+                LinkedList<Value> solution, LinkedList<Set<Value>> inferences) {
+        int step = solution.size();
+
+        for (int i = 0; i < step; i++)
+            if (!sets.get(step).getRelationWith(sets.get(i))
+                    .getAdjacencySet(value).contains(solution.get(i)))
+                return null;
+
+        LinkedList<Set<Value>> result = new LinkedList<>();
+
+        for (int i = step + 1; i < sets.size(); i++) {
+            result.add(new HashSet<>(inferences.get(i - step)));
+            result.getLast().retainAll(sets.get(step)
+                    .getRelationWith(sets.get(i)).getAdjacencySet(value));
+
+            if (result.getLast().isEmpty())
+                return null;
+        }
+
+        solution.add(value);
+
+        return result;
+    }
+    // See ex. 5 & 6
+}
+\end{lstlisting}
+\egroup

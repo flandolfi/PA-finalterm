@@ -1,37 +1,109 @@
-\section{Esercizio 1}
+\section*{Esercizio 1}
 
-Sono state definite le classi: %
-%
-\begin{enumerate*}
-
-    \item \texttt{Value} (\autoref{lst:val}), i cui oggetti rappresentano i
-    possibili valori di un dominio. Sono stati ridefiniti i metodi {\tt
-    equals()} e {\tt hashcode()} per poter utilizzare correttamente oggetti {\tt
-    Value} in un {\tt HashSet} o come chiave di una {\tt HashMap};
-
-    \item \texttt{Domain} (\autoref{lst:set}), che rappresenta i dominî delle
-    variabili, i cui possibili valori ({\tt Value}) sono contenuti in un {\tt
-    HashSet}. È possibile definire una relazione ({\tt Relation}) con un altro
-    dominio tramite il metodo {\tt addRelation()}. La relazione di default con
-    ogni altro dominio è il prodotto cartesiano ({\tt CartesianProduct});
-
-    \item La classe astratta {\tt Relation} (\autoref{lst:rel}) e le sue
-    implementazioni {\tt EqConstraint}, {\tt DiffConstraint} e {\tt
-    CartesianProduct} (\autoref{lst:eq}, \ref{lst:diff} e \ref{lst:cp}), che
-    rappresentano le relazioni (o i vincoli) tra un dominio ed un altro. Le
-    coppie dei valori vengono memorizzate per \emph{afterset}\footnote{Data una
-    relazione $R$, si definisce \emph{afterset} (o \emph{successor
-    neighborhood}) di $x$ in $R$ l'insieme $xR = \{\ y\ |\ xRy\ \}$.}: una {\tt
-    HashMap} mappa ogni valore del dominio della relazione al suo afterset (un
-    {\tt HashSet}). Tramite gli afterset vengono poi calcolati, in base
-    all'implementazione della classe concreta, i possibili valori che soddisfano
-    la relazione (con il metodo astratto {\tt getAdjacencySet()}).
-
-\end{enumerate*}
+Nel package {\tt dsl} (\autoref{lst:val}, \ref{lst:set}, \ref{lst:rel},
+\ref{lst:eq} e \ref{lst:diff}) sono contenute le classi utilizzate per
+rappresentare il DSL. La classe \texttt{Domain} rappresenta i dominî delle
+variabili, i cui possibili valori sono rappresentati da oggetti della classe
+\texttt{Value} e sono contenuti in un {\tt HashSet} (per questo motivo sono
+stati ridefiniti i metodi {\tt equals()} e {\tt hashcode()}). È possibile
+definire una relazione tra due dominî tramite la classe {\tt Relation} e
+derivate, ovvero {\tt EqConstraint}, che rappresenta un vincolo di uguaglianza,
+e {\tt DiffConstraint}, che rappresenta un vincolo di disuguaglianza. La
+relazione di default tra ogni coppia di dominî per la quale non ne è stata
+definita una è il loro prodotto cartesiano. Le coppie dei valori vengono
+memorizzate per \emph{afterset}\footnote{Data una relazione $R$, si definisce
+\emph{afterset} (o \emph{successor neighborhood}) di $x$ in $R$ l'insieme $xR = \{\
+y\ |\ xRy\ \}$.}: una {\tt HashMap} mappa ogni valore del dominio della
+relazione al suo afterset (un {\tt HashSet}). Tramite gli afterset vengono poi
+calcolati, in base al tipo di relazione, i possibili valori che soddisfano i
+vincoli, se presenti, tramite il metodo  {\tt getAdjacencySet()}.
 
 \lstinputlisting[caption=Value.java, label=lst:val]{../../../src/dsl/Value.java}
 \lstinputlisting[caption=Domain.java, label=lst:set]{../../../src/dsl/Domain.java}
-\lstinputlisting[caption=Relation.java, label=lst:rel]{../../../src/dsl/Relation.java}
-\lstinputlisting[caption=EqConstraint.java, label=lst:eq]{../../../src/dsl/EqConstraint.java}
-\lstinputlisting[caption=DiffConstraint.java, label=lst:diff]{../../../src/dsl/DiffConstraint.java}
-\lstinputlisting[caption=CartesianProduct.java, label=lst:cp]{../../../src/dsl/CartesianProduct.java}
+
+\bgroup
+\createlinenumber{29}{\smallvdots}
+\createlinenumber{30}{31}
+\begin{lstlisting}[caption=Relation.java, label=lst:rel]
+package dsl;
+
+import java.util.*;
+
+public class Relation {
+    protected final HashMap<Value, HashSet<Value>> afterSets = new HashMap<>();
+    protected final Domain domain;
+    protected final Domain range;
+
+    public Relation(Domain domain, Domain range) {
+        this.domain = domain;
+        this.range = range;
+    }
+
+    public boolean addPair(Value lValue, Value rValue) {
+        return afterSets.computeIfAbsent(lValue, k -> new HashSet<>()).add(rValue);
+    }
+
+    public HashSet<Value> getAfterSet(Value value) {
+        return afterSets.getOrDefault(value, new HashSet<>());
+    }
+
+    public Domain getDomain() { return domain; }
+    public Domain getRange() { return range; }
+
+    public HashSet<Value> getAdjacencySet(Value value) {
+        return range.getValues();
+    }
+    // See ex. 5
+}
+\end{lstlisting}
+\egroup
+
+\bgroup
+\createlinenumber{14}{\smallvdots}
+\createlinenumber{15}{19}
+\begin{lstlisting}[caption=EqConstraint.java, label=lst:eq]
+package dsl;
+
+import java.util.HashSet;
+
+public class EqConstraint extends Relation {
+    public EqConstraint(Domain domain, Domain range) { super(domain, range); }
+
+    @Override
+    public HashSet<Value> getAdjacencySet(Value value) {
+        HashSet<Value> afterSet = getAfterSet(value);
+
+        return afterSet.size() > 1? new HashSet<>() : afterSet;
+    }
+    // See ex. 5
+}
+\end{lstlisting}
+\egroup
+
+\bgroup
+\createlinenumber{15}{\smallvdots}
+\createlinenumber{16}{25}
+\begin{lstlisting}[caption=DiffConstraint.java, label=lst:diff]
+package dsl;
+
+import java.util.HashSet;
+
+public class DiffConstraint extends Relation {
+    public DiffConstraint(Domain domain, Domain range) { super(domain, range); }
+
+    @Override
+    public HashSet<Value> getAdjacencySet(Value value) {
+        HashSet<Value> values = range.getValues();
+        values.removeAll(getAfterSet(value));
+
+        return values;
+    }
+    // See ex. 5
+}
+\end{lstlisting}
+\egroup
+
+% \lstinputlisting[caption=Relation.java, label=lst:rel]{../../../src/dsl/Relation.java}
+% \lstinputlisting[caption=EqConstraint.java, label=lst:eq]{../../../src/dsl/EqConstraint.java}
+% \lstinputlisting[caption=DiffConstraint.java, label=lst:diff]{../../../src/dsl/DiffConstraint.java}
+% \lstinputlisting[caption=CartesianProduct.java, label=lst:cp]{../../../src/dsl/CartesianProduct.java}
