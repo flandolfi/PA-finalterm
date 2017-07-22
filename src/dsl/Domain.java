@@ -18,6 +18,6 @@ public class Domain {
     }
 
     public Relation getRelationWith(Domain range) {
-        return relations.getOrDefault(range, new CartesianProduct(this, range));
+        return relations.getOrDefault(range, new Relation(this, range));
     }
 }

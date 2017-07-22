@@ -13,7 +13,7 @@ public class EqConstraint extends Relation {
     }
 
     @Override
-    public String explain(Value lValue, Value rValue) {
+    protected String explain(Value lValue, Value rValue) {
         return rValue.getDomainName() + " = " + rValue;
     }
 }

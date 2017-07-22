@@ -2,7 +2,7 @@ package dsl;
 
 import java.util.*;
 
-public abstract class Relation {
+public class Relation {
     protected final HashMap<Value, HashSet<Value>> afterSets = new HashMap<>();
     protected final Domain domain;
     protected final Domain range;
@@ -22,6 +22,10 @@ public abstract class Relation {
 
     public Domain getDomain() { return domain; }
     public Domain getRange() { return range; }
-    public abstract HashSet<Value> getAdjacencySet(Value value);
-    public abstract String explain(Value lValue, Value rValue);
+
+    public HashSet<Value> getAdjacencySet(Value value) {
+        return range.getValues();
+    }
+
+    protected String explain(Value lValue, Value rValue) { return ""; }
 }

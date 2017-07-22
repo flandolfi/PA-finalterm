@@ -1,6 +1,5 @@
-package solver;
+package dsl;
 
-import dsl.*;
 import java.util.*;
 
 public class SolutionsEnumerator extends Solver

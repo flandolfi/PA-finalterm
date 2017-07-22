@@ -1,6 +1,5 @@
-package solver;
+package dsl;
 
-import dsl.*;
 import compiler.*;
 import java.io.*;
 import java.util.*;
@@ -95,8 +94,7 @@ public class Solver {
         }
 
         try {
-            Parser parser = new Parser();
-            Solver solver = new Solver(parser.parse(
+            Solver solver = new Solver((new Parser()).parse(
                     new BufferedReader(new FileReader(args[0]))));
             solver.backtrackingSearch();
             System.out.println(solver.explain());

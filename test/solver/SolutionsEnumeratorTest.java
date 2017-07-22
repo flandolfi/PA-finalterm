@@ -1,7 +1,7 @@
 package solver;
 
-import dsl.Value;
-import compiler.Parser;
+import dsl.*;
+import compiler.*;
 import org.junit.jupiter.api.Test;
 
 import java.io.BufferedReader;
@@ -18,7 +18,22 @@ class SolutionsEnumeratorTest {
             Parser parser = new Parser();
             SolutionsEnumerator solver = new SolutionsEnumerator(
                     parser.parse(new BufferedReader(
-                    new FileReader("./test/samples/Sudoku.csp"))));
+                            new FileReader("./test/samples/Sudoku.csp"))));
+
+            while(solver.hasMoreElements())
+                System.out.println(solver.nextElement());
+        } catch (Exception e) {
+            fail("You shouldn't be here! (op.cit.)");
+        }
+    }
+
+    @Test
+    void enumerateSingle() {
+        try {
+            Parser parser = new Parser();
+            SolutionsEnumerator solver = new SolutionsEnumerator(
+                    parser.parse(new BufferedReader(
+                            new FileReader("./test/samples/Single.csp"))));
 
             while(solver.hasMoreElements())
                 System.out.println(solver.nextElement());

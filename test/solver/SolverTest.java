@@ -1,5 +1,6 @@
 package solver;
 
+import dsl.Solver;
 import dsl.Value;
 import compiler.Parser;
 import org.junit.jupiter.api.Test;
