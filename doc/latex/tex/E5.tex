@@ -1,4 +1,4 @@
-\section*{Esercizio 5}
+\section*{Esercizio 5}\label{sec:ex5}
 
 Vengono estese le classi {\tt Relation} e derivate con il metodo ({\tt
 protected}) {\tt explain()} (\autoref{lst:rel_c}, \ref{lst:eq_c} e
@@ -12,18 +12,16 @@ non viene fornita alcuna motivazione. Viene dunque estesa anche la classe {\tt
 Solver} con il metodo {\tt explain()} (\autoref{lst:solver_c}), questa volta
 pubblico, che restituisce una motivazione ({\tt String}) all'ultima soluzione
 fornita (sia da {\tt backtrackingSearch()} che da {\tt searchNext()}, nel caso
-di {\tt SolutionsEnumerator}). Questo metodo non fa altro che concatenare
-elegantemente le motivazioni fornite dai metodi {\tt explain()} dei vari oggetti
-{\tt Relation}. Un esempio di stringa restituita da questo metodo verrà fornita
-nel prossimo esercizio\footnote{Essendo le motivazioni fornite solamente a
-soluzioni generate dalle classi {\tt Solver} e {\tt SolutionsEnumerator}, non
-occorre effettuare controlli sulle coppie di valori passate come argomento ai
-metodi {\tt explain()} delle classi {\tt Relation} e derivate, poiché saranno
-sicuramente presenti nei loro afterset. Questo è inoltre possibile poiché la
-visibilità di questi metodi è {\tt protected}, quindi ristretta al package e
-alle sottoclassi.}.
+di {\tt SolutionsEnumerator}). Questo metodo concatena le motivazioni fornite
+dai metodi {\tt explain()} dei vari oggetti {\tt Relation}\footnote{Essendo le
+motivazioni fornite solamente a soluzioni generate dalle classi {\tt Solver} e
+{\tt SolutionsEnumerator}, non occorre effettuare controlli sulle coppie di
+valori passate come argomento ai metodi {\tt explain()} delle classi {\tt
+Relation} e derivate, poiché saranno sicuramente presenti nei loro afterset.
+Questo è inoltre possibile poiché la visibilità di questi metodi è {\tt
+protected}, quindi ristretta al package e alle sottoclassi.}.
 %
-\begin{lstlisting}[caption=Relation.java (cont.), label=lst:rel_c, firstnumber=30]
+\begin{lstlisting}[caption=Relation.java (cont.), label=lst:rel_c, firstnumber=29]
     protected String explain(Value lValue, Value rValue) { return ""; }
 \end{lstlisting}
 %

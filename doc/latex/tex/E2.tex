@@ -7,24 +7,43 @@ scelte progettuali: %
 %
 \begin{enumerate*}
 
-    \item i domini devono avere un nome letterale (ad es. {\tt x}, {\tt y}, ...);
+    \item i dominî devono avere un nome letterale (ad es. {\tt x}, {\tt y}, ...);
 
     \item i valori devono cominciare col nome del dominio a cui appartengono,
     seguito da un numero (ad es. {\tt x1}, {\tt x2}, ...);
 
     \item le relazioni devono avere un solo dominio e un solo codominio;
 
-    \item le relazioni su uno stesso valore sono trattate in congiunzione logica
+    \item i vincoli su uno stesso valore sono trattati in congiunzione logica
     (ad es. {\tt !\{(x1, y1), (x1, y2)\}} $\equiv x = x1 \Rightarrow y \neq y1
     \land y \neq y2$);
 
-    \item non si possono definire più relazioni sugli stessi due insiemi:
-    essendo il vincolo di equivalenza più restrittivo di quello di
-    disuguaglianza, quest'ultimo può risultare superfluo o, peggio, creare un
-    vincolo insoddisfacibile. Se invece si definiscono due relazioni dello
-    stesso tipo, queste possono essere scritte come un'unica relazione.
+    \item non si possono definire più vincoli sugli stessi due insiemi: essendo
+    quello di equivalenza più restrittivo di quello di disuguaglianza,
+    quest'ultimo può risultare superfluo o, peggio, creare un vincolo
+    insoddisfacibile. Se invece si definiscono due relazioni dello stesso tipo,
+    queste possono essere scritte come un'unica relazione.
 
 \end{enumerate*}
+%
+% I vari metodi della classe {\tt Parser} implementano le produzioni della
+% seguente grammatica EBNF, dove $String$ e $Number$ rappresentano le produzioni
+% di termini alfabetici e numerali:
+%
+% \begin{minipage}{0.5\textwidth}
+%     \begin{align*}
+%         CSP &::= Domain^+\ Relation\text{*} \\
+%         Domain &::= String\ \text{\tt =}\ \text{\tt \{}\ Value^+\ \text{\tt \}} \\
+%         Value &::= String\ Number \\
+%     \end{align*}
+% \end{minipage}
+% \begin{minipage}{0.5\textwidth}
+%     \begin{align*}
+%         Relation &::= \text{\tt \{}\ Pair^+\ \text{\tt \}}\ \ |\ \ \text{\tt !\{}\ Pair^+\ \text{\tt \}} \\
+%         Pair &::= \text{\tt (}\ Value\ \text{\tt ,}\ Value\ \text{\tt )} \\
+%         & \\
+%     \end{align*}
+% \end{minipage}
 
 \lstinputlisting[caption=Type.java, label=lst:type]{../../../src/compiler/Type.java}
 \lstinputlisting[caption=Scanner.java, label=lst:scanner]{../../../src/compiler/Scanner.java}

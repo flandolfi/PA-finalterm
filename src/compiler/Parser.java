@@ -14,7 +14,7 @@ public class Parser {
         scanner = new Scanner(reader);
         sets = new HashMap<>();
 
-        return parseSolver();
+        return parseCSP();
     }
 
     private void expect(Type type) throws CompilerException {
@@ -25,7 +25,7 @@ public class Parser {
                     + type + "; Found: " + token + ".");
     }
 
-    private Collection<Domain> parseSolver() throws CompilerException {
+    private Collection<Domain> parseCSP() throws CompilerException {
         parseDList();
         parseRList();
         expect(Type.EOF);

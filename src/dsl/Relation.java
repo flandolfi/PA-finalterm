@@ -20,12 +20,11 @@ public class Relation {
         return afterSets.getOrDefault(value, new HashSet<>());
     }
 
-    public Domain getDomain() { return domain; }
-    public Domain getRange() { return range; }
-
     public HashSet<Value> getAdjacencySet(Value value) {
         return range.getValues();
     }
 
+    public Domain getDomain() { return domain; }
+    public Domain getRange() { return range; }
     protected String explain(Value lValue, Value rValue) { return ""; }
 }

@@ -1,7 +1,7 @@
 \section*{Esercizio 7}
 
-La \emph{reflection} è la capacità di un programma di esaminare i suoi stessi
-metadati e, nel caso dei linguaggi di programmazione a oggeti, di: %
+La \emph{reflection} è la capacità di un programma di manipolare la sua
+struttura a tempo di esecuzione. Nel caso dei linguaggi di programmazione a oggetti, questo permette di: %
 %
 \begin{enumerate*}
     \item ispezionare metodi e attributi di classi ed interfacce;
@@ -9,29 +9,34 @@ metadati e, nel caso dei linguaggi di programmazione a oggeti, di: %
     \item invocare metodi di oggetti e classi.
 \end{enumerate*}
 %
-Questo è possibile fintanto che viene mantenuta una tabella dei simboli
-(\emph{symbol table}), ovvero una struttura dati che mappa ogni identificatore
-alle sue relative informazioni conosciute. Alcuni dei principali linguaggi
-dotati di reflection sono: Java, C\# (e gli altri linguaggi .NET), Perl, PHP,
-Tcl, Python, Ruby e JavaScript. La reflection viene usata principalmente per
-creare programmi che manipolano altri programmi, la quale struttura può non
-essere conosciuta a priori. Può essere utile, ad esempio, per effettuare test su
-codice. Spesso, invece, risulta più conveniente l'utilizzo di polimorfismo. Ad
-esempio, nel metodo {\tt explain()} della classe {\tt Solver}
-(\autoref{lst:solver_c}) avrei potuto generare la stringa in base al tipo di
-vincolo trovato (ad es. \texttt{if(R \textbf{instaceof} EqConstraint) \{} ...
-{\tt \}}). Nonostate questo tipo di programmazione sia comune nei linguaggi di
-scripting, nei linguaggi di programmazione ad oggetti è più appropriato (e più
-efficiente) utilizzare il polimorfismo ed eseguire un metodo comune alle
-sottoclassi
+La struttura deve poter essere esprimibile nello stesso linguaggio del programma
+sotto forma di dati (\emph{metadati}) o oggetti (\emph{metaoggetti}) che ne
+descrivano gli aspetti.
+%
+Alcuni dei principali linguaggi dotati di reflection sono: Java, C\# (e gli
+altri linguaggi .NET), Perl, PHP, Tcl, Python, Ruby e JavaScript. La reflection
+viene usata principalmente per creare programmi che manipolano altri programmi,
+la quale struttura può non essere conosciuta a priori. Può essere utile, ad
+esempio, per effettuare debug o test di codice. Spesso, in OOP, la reflection
+può essere sostituita dal polimorfismo. Ad esempio, nel metodo {\tt explain()}
+della classe {\tt Solver} (\autoref{lst:solver_c}) avremmo potuto generare la
+stringa in base al tipo di vincolo (ad es. \texttt{if(R \textbf{instaceof}
+EqConstraint) \{} ... {\tt \}}). Nonostate questo modello di programmazione sia
+comune in alcuni linguaggi di scripting, in OOP è più appropriato (e più
+efficiente) eseguire un metodo di un'interfaccia o di una superclasse comune e
+variarne il comportamento in base alla sottoclasse, come ad esempio {\tt
+explain()} della classe {\tt Relation} e derivate (si veda
+l'\hyperref[sec:ex5]{Esercizio 5})
 %
 \footnote{Riferimenti:%
 \begin{itemize}[noitemsep,topsep=0pt]
+    \item[--] K. Czarnecki, U. W. Eisenecker. \emph{Generative Programming:
+    Methods, Tools, and Applications}. 2000.
+    \item[--] Oracle.
+    \href{http://docs.oracle.com/javase/tutorial/reflect/index.html}{
+    \emph{Java\texttrademark{} Documentation. Trail: The Reflection API}}. 2015.
     \item[--] M. L. Scott. \emph{Programming Language Pragmatics (Third
     Edition)}. 2009.
     \item[--] C. Szyperski, D. Gruntz, S. Murer. \emph{Component Software --
     Beyond Object Oriented Programming (Second Edition)}. 2002.
-    \item[--] Oracle.
-    \href{http://docs.oracle.com/javase/tutorial/reflect/index.html}{
-    \emph{Java\texttrademark{} Documentation. Trail: The Reflection API}}. 2015.
 \end{itemize}}.

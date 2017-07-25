@@ -9,21 +9,20 @@ stati ridefiniti i metodi {\tt equals()} e {\tt hashcode()}). È possibile
 definire una relazione tra due dominî tramite la classe {\tt Relation} e
 derivate, ovvero {\tt EqConstraint}, che rappresenta un vincolo di uguaglianza,
 e {\tt DiffConstraint}, che rappresenta un vincolo di disuguaglianza. La
-relazione di default tra ogni coppia di dominî per la quale non ne è stata
-definita una è il loro prodotto cartesiano. Le coppie dei valori vengono
+relazione di default tra ogni coppia di dominî per la quale non è stato definito
+alcun vincolo è il loro prodotto cartesiano. Le coppie dei valori vengono
 memorizzate per \emph{afterset}\footnote{Data una relazione $R$, si definisce
 \emph{afterset} (o \emph{successor neighborhood}) di $x$ in $R$ l'insieme $xR = \{\
 y\ |\ xRy\ \}$.}: una {\tt HashMap} mappa ogni valore del dominio della
 relazione al suo afterset (un {\tt HashSet}). Tramite gli afterset vengono poi
 calcolati, in base al tipo di relazione, i possibili valori che soddisfano i
-vincoli, se presenti, tramite il metodo  {\tt getAdjacencySet()}.
+vincoli, se presenti, con il metodo  {\tt getAdjacencySet()}.
 
 \lstinputlisting[caption=Value.java, label=lst:val]{../../../src/dsl/Value.java}
 \lstinputlisting[caption=Domain.java, label=lst:set]{../../../src/dsl/Domain.java}
 
 \bgroup
 \createlinenumber{29}{\smallvdots}
-\createlinenumber{30}{31}
 \begin{lstlisting}[caption=Relation.java, label=lst:rel]
 package dsl;
 
@@ -47,12 +46,12 @@ public class Relation {
         return afterSets.getOrDefault(value, new HashSet<>());
     }
 
-    public Domain getDomain() { return domain; }
-    public Domain getRange() { return range; }
-
     public HashSet<Value> getAdjacencySet(Value value) {
         return range.getValues();
     }
+
+    public Domain getDomain() { return domain; }
+    public Domain getRange() { return range; }
     // See ex. 5
 }
 \end{lstlisting}
